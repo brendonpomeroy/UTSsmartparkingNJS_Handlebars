@@ -1,0 +1,39 @@
+<h1>Manage Users</h1>
+<p>Welcome to User management</p>
+
+<section>
+<form>
+    UserID <input type="text" id="userID" name="userID">
+    Name<input type="text" id="name" name="name">
+    Phone<input type="text" id="phone" name="phone">
+    Email<input type="text" id="email" name="email">
+    User Type<input type="text" id="usertype" name="usertype">
+    Password<input type="text" id="password" name="password">
+</form>
+</section>
+
+<section class="users">
+    <h2>Current Users</h2>
+    <a href="/get-users">Load Users</a>
+    <div>
+        {{# each items }}
+            <article class="users">
+                <div>
+                    UserID: {{ this.userID }}
+                </div>
+                <div>
+                    Name: {{ this.name }}
+                </div>
+                <div>
+                    Phone: {{ this.phone }}
+                </div>
+                <div>
+                    Email: {{ this.email }}
+                </div>
+                <div>
+                    User Type: {{ this.usertype }}
+                </div>
+            </article>
+            {{/each }}
+    </div>
+</section>
