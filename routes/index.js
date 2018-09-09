@@ -31,13 +31,13 @@ router.get('/get-users', function(req, res, next) {
     var users = [];
     mongo.connect(url, function(err, client) {
         assert.equal(null, err);
-        var db = client.db('carParkDB'); // yoooooonew variable 3.0+
+        var db = client.db('carParkDB'); // new variable ersion 3.0+ (connection loads client -> this stores the database)
         const cursor = db.collection('Users').find(); //essentially an iterator
         cursor.forEach(function(doc, err) { // doc is the variable we want -> document (like an SQL entry)
             assert.equal(null, err); // check for an error
             users.push(doc); //add the document to the users array
         }, function() {
-            client.close();// must be here due to node.js being asynchronous //yooooooo
+            client.close();// must be here due to node.js being asynchronous // must close the client from mongo version 3.0+
             res.render('manageUsers', { items: users});
         });
     });
@@ -53,12 +53,13 @@ router.post('/insert-user', function(req, res, next) {
         usertype: req.body.usertype
     };
 
-    mongo.connect(url, function(err, db){
+    mongo.connect(url, function(err, client){
         assert().equal(null, err);
+        var db = client.db('carParkDB');
         db.collection('Users').insertOne(user, function(err, result) {
             assert(null, err);
             console.log('user added.');
-            db.close();
+            client.close();
         });
     });
     res.redirect('/manageUsers');
