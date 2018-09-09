@@ -31,7 +31,22 @@ router.get('/manageUsers', function(req, res) {
 });
 
 router.post('/login', function(req, res, next) {
-    let users = getUsers();
+    var users = [];
+    mongo.connect(url, function(err, client) {
+        assert.equal(null, err);
+        var db = client.db('carParkDB'); // new variable ersion 3.0+ (connection loads client -> this stores the database)
+        const cursor = db.collection('Users').find(); //essentially an iterator
+        cursor.forEach(function(doc, err) { // doc is the variable we want -> document (like an SQL entry)
+            assert.equal(null, err); // check for an error
+            users.push(doc); //add the document to the users array
+        }, function() {
+            client.close();// must be here due to node.js being asynchronous // must close the client from mongo version 3.0+
+            res.render('manageUsers', { items: users});
+        });
+    });
+
+
+    //let users = getUsers();
     for (let i = 0, len = users.length; i < len; i++) {
         if (users[i].userID == req.body.userID && users[i].password === req.body.password) {
             res.redirect('/dashboard', { status: 'success' });
