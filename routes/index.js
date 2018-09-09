@@ -10,6 +10,10 @@ router.get('/', function(req, res, next) {
   res.render('index', { layout: false });
 });
 
+router.get('/dashboard', function(req, res, next) {
+    res.render('dashboard', { title: 'Dashboard' });
+});
+
 router.get('/bookSpace', function(req, res, next) {
     res.render('bookSpace', { title: 'Book Space' });
 });
@@ -26,8 +30,17 @@ router.get('/manageUsers', function(req, res) {
     res.render('manageUsers')
 });
 
+router.post('/login', function(req, res, next) {
+    let users = getUsers();
+    for (let i = 0, len = users.length; i < len; i++) {
+        if (users[i].userID == req.body.userID && users[i].password === req.body.password) {
+            res.redirect('/dashboard', { status: 'success' });
+        }
+    }
+    res.redirect('/dashboard', { status: 'fail' });
+});
 
-router.get('/get-users', function(req, res, next) {
+router.get('/get-users', function(req, res, next) { //list all users
     var users = [];
     mongo.connect(url, function(err, client) {
         assert.equal(null, err);
@@ -72,5 +85,21 @@ router.post('/update', function(req, res, next) {
 router.post('/delete', function(req, res, next) {
 
 });
+
+function getUsers() {
+    var users = [];
+    mongo.connect(url, function(err, client) {
+        assert.equal(null, err);
+        var db = client.db('carParkDB'); // new variable ersion 3.0+ (connection loads client -> this stores the database)
+        const cursor = db.collection('Users').find(); //essentially an iterator
+        cursor.forEach(function(doc, err) { // doc is the variable we want -> document (like an SQL entry)
+            assert.equal(null, err); // check for an error
+            users.push(doc); //add the document to the users array
+        }, function() {
+            client.close();// must be here due to node.js being asynchronous // must close the client from mongo version 3.0+
+        });
+    });
+    return users;
+}
 
 module.exports = router;
