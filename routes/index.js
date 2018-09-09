@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-var mongo = require('mongodb');
+var mongo = require('mongodb').MongoClient;
 var assert = require('assert');
 
 var url = "mongodb+srv://System:utssmartparking@parkdb-fez7r.mongodb.net/test?retryWrites=true";
