@@ -3,7 +3,7 @@ var router = express.Router();
 var mongo = require('mongodb').MongoClient;
 var assert = require('assert');
 
-var url = "mongodb+srv://System:utssmartparking@parkdb-fez7r.mongodb.net/carParkDB";
+var url = "mongodb+srv://System:utssmartparking@parkdb-fez7r.mongodb.net/";
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -29,14 +29,15 @@ router.get('/manageUsers', function(req, res) {
 
 router.get('/get-users', function(req, res, next) {
     var users = [];
-    mongo.connect(url, function(err, db) {
+    mongo.connect(url, function(err, client) {
         assert.equal(null, err);
+        var db = client.db('carParkDB'); // yoooooonew variable 3.0+
         const cursor = db.collection('Users').find(); //essentially an iterator
         cursor.forEach(function(doc, err) { // doc is the variable we want -> document (like an SQL entry)
             assert.equal(null, err); // check for an error
             users.push(doc); //add the document to the users array
         }, function() {
-            db.close();// must be here due to node.js being asynchronous
+            client.close();// must be here due to node.js being asynchronous //yooooooo
             res.render('manageUsers', { items: users});
         });
     });
