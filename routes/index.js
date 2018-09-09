@@ -3,7 +3,7 @@ var router = express.Router();
 var mongo = require('mongodb').MongoClient;
 var assert = require('assert');
 
-var url = "mongodb+srv://System:utssmartparking@parkdb-fez7r.mongodb.net/test";
+var url = "mongodb+srv://System:utssmartparking@parkdb-fez7r.mongodb.net/parkdb";
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
