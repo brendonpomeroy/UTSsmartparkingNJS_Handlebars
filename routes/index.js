@@ -55,7 +55,7 @@ router.post('/insert-user', function(req, res, next) {
     mongo.connect(url, function(err, db){
         assert().equal(null, err);
         db.collection('users').insertOne(user, function(err, result) {
-            assert(null, error);
+            assert(null, err);
             console.log('user added.');
             db.close();
         });
