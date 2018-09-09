@@ -2,6 +2,7 @@
 <p>Welcome to User management</p>
 
 <section>
+    <h2>Add User</h2>
 <form action="/insert-user" method="post">
     UserID <input type="text" id="userID" name="userID">
     Name<input type="text" id="name" name="name">
@@ -17,6 +18,7 @@
     <h2>Current Users</h2>
     <a href="/get-users">Load Users</a>
     <div>
+
         {{# each items }}
             <article class="users">
                 <div>

@@ -46,6 +46,23 @@ li a:hover {
   text-decoration: none;
 }
 
+#loginWrapper {
+  text-align: center;
+}
+
+.buttonUTS {
+  background-color: #0f4beb;
+  border: none;
+  color: white;
+  padding: 25px 200px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 10px;
+  cursor: pointer;
+}
+
 .footer {
   background-color: black;
   margin: 0;
