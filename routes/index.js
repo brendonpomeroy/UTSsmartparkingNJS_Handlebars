@@ -22,6 +22,10 @@ router.get('/account', function(req, res, next) {
     res.render('account', { title: 'Account' });
 });
 
+router.get('/manageUsers', function(req, res) {
+    res.render('manageUsers')
+});
+
 
 router.get('/get-users', function(req, res, next) {
     var users = [];
