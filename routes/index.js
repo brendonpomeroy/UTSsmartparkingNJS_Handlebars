@@ -29,8 +29,8 @@ router.get('/manageUsers', function(req, res) {
 
 router.get('/get-users', function(req, res, next) {
     var users = [];
-    mongo.connect(url, function(err, db){
-        assert().equal(null, err);
+    mongo.connect(url, function(err, db) {
+        assert.equal(null, err);
         var cursor = db.collection('users').find(); //essentially an iterator
         cursor.forEach(function(doc, err) { // doc is the variable we want -> document (like an SQL entry)
             assert.equal(null, err); // check for an error
