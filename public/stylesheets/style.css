@@ -8,6 +8,11 @@ a {
   color: #00B7FF;
 }
 
+#header {
+  background-color:white;
+  width: 100%;
+}
+
 .nav{
   list-style:none;
   margin:0;
