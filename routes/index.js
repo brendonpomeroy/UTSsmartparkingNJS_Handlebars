@@ -3,7 +3,7 @@ var router = express.Router();
 var mongo = require('mongodb').MongoClient;
 var assert = require('assert');
 
-var url = "mongodb+srv://System:utssmartparking@parkdb-fez7r.mongodb.net/parkdb";
+var url = "mongodb+srv://System:utssmartparking@parkdb-fez7r.mongodb.net/carParkDB";
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -31,7 +31,7 @@ router.get('/get-users', function(req, res, next) {
     var users = [];
     mongo.connect(url, function(err, db) {
         assert.equal(null, err);
-        var cursor = db.collection('users').find(); //essentially an iterator
+        var cursor = db.collection('Users').find(); //essentially an iterator
         cursor.forEach(function(doc, err) { // doc is the variable we want -> document (like an SQL entry)
             assert.equal(null, err); // check for an error
             users.push(doc); //add the document to the users array
