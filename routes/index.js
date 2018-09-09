@@ -7,7 +7,7 @@ var url = "mongodb+srv://System:utssmartparking@parkdb-fez7r.mongodb.net/";
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Express' });
+  res.render('index', { layout: false });
 });
 
 router.get('/bookSpace', function(req, res, next) {

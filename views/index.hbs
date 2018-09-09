@@ -1,11 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>UTS Smart Parking</title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+</head>
+<body>
+<div class="header">
+    <a href="index.jsp"><img src="images/UTSlogo.png" alt="UTS logo" height="100"></a>
+</div>
 
-    <div id="loginWrapper">
-        <h1>UTS Parking</h1>
-        <form action="/login.jsp">
-            <input type="text" onclick="this.value='';" name="userID" value="  UTS Staff / Student ID">
-            <br>
-            <input type="password" onclick="this.value='';" name="password" value=" Password">
-            <br>
-            <a href="dashboard.jsp" class="buttonUTS">Login</a>
-        </form>
-    </div>
+<div id="loginWrapper">
+    <h1>UTS Parking</h1>
+    <form action="/login.jsp">
+        <input type="text" onclick="this.value='';" name="userID" class="loginInput" value="  UTS Staff / Student ID">
+        <br>
+        <input type="password" onclick="this.value='';" name="password" class="loginInput" value=" Password">
+        <br>
+        <a href="dashboard.jsp" class="buttonUTS">Login</a>
+    </form>
+</div>
+
+<div class="footer">
+</div>
+</body>
+</html>
