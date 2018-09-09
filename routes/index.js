@@ -54,12 +54,13 @@ router.post('/insert-user', function(req, res, next) {
 
     mongo.connect(url, function(err, db){
         assert().equal(null, err);
-        db.collection('users').insertOne(user, function(err, result) {
+        db.collection('Users').insertOne(user, function(err, result) {
             assert(null, err);
             console.log('user added.');
             db.close();
         });
-    })
+    });
+    res.redirect('/manageUsers');
 });
 
 router.post('/update', function(req, res, next) {
