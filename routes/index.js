@@ -45,7 +45,7 @@ router.post('/login', function(req, res, next) {
 });
 
 router.get('/get-users', function(req, res, next) { //list all users
-    var users = [];
+    let users = [];
     mongo.connect(url, function(err, client) {
         assert.equal(null, err);
         var db = client.db('carParkDB'); // new variable ersion 3.0+ (connection loads client -> this stores the database)
@@ -61,14 +61,15 @@ router.get('/get-users', function(req, res, next) { //list all users
 });
 
 router.post('/insert-user', function(req, res, next) {
-    var user = {
-        userID: req.body.userID,
+    let user = {
+        userID: parseInt(req.body.userID),
         name: req.body.name,
         phone: req.body.phone,
         email: req.body.email,
         password: req.body.password,
         usertype: req.body.usertype
     };
+    console.log("User created: " + user.name);
 
     mongo.connect(url, function(err, client){
         assert().equal(null, err);
