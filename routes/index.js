@@ -71,7 +71,16 @@ router.post('/insert-user', function(req, res, next) {
     };
     console.log("User created: " + user.name);
 
+
     mongo.connect(url, function(err, client){
+        assert().equal(null, err);
+        var db = client.db('carParkDB');
+        db.collection('Users').insertOne(user);
+        client.close();
+    });
+    res.redirect('/manageUsers');
+
+    /*mongo.connect(url, function(err, client){
         assert().equal(null, err);
         var db = client.db('carParkDB');
         db.collection('Users').insertOne(user, function(err, result) {
@@ -80,7 +89,7 @@ router.post('/insert-user', function(req, res, next) {
             client.close();
         });
     });
-    res.redirect('/manageUsers');
+    res.redirect('/manageUsers');*/
 });
 
 router.post('/update', function(req, res, next) {
