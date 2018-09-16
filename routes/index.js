@@ -75,7 +75,7 @@ router.post('/insert-user', function(req, res, next) {
     mongo.connect(url, function(err, client){
         assert().equal(null, err);
         var db = client.db('carParkDB');
-        db.collection('Users').insertOne(user);
+        db.collection('Users').insert(user);
         client.close();
     });
     res.redirect('/manageUsers');
