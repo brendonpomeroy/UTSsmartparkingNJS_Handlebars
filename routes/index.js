@@ -64,7 +64,7 @@ router.get('/getSpaces', function(req, res) {
         });
     });
 
-    res.render('manageUsers', { spaces: spaces, bookings: bookings});
+    res.render('bookSpace', { spaces: spaces, bookings: bookings});
 });
 
 router.post('/login', function(req, res) {
