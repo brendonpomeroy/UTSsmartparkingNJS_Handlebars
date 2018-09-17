@@ -11,7 +11,7 @@ router.get('/', function(req, res, next) {
 });
 
 router.get('/dashboard', function(req, res, next) {
-    res.render('dashboard', { title: 'Dashboard' });
+    res.render('dashboard', { status: 'na' });
 });
 
 router.get('/bookSpace', function(req, res, next) {
@@ -48,7 +48,7 @@ router.post('/login', function(req, res, next) {
         const cursor = db.collection('Users').find({ userID: req.body.userID });
         if (cursor.userID == req.body.userID && cursor.password === req.body.password) {
             user = cursor;
-            res.render('/dashboard', { status: 'success' });
+            res.render('dashboard', { status: 'success' });
         }
     });
     res.render('/dashboard', { status: 'fail' });
