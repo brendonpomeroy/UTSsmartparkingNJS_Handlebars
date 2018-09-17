@@ -45,8 +45,8 @@ router.post('/login', function(req, res) {
     mongo.connect(url, function(err, client) {
         assert.equal(null, err);
         var db = client.db('carParkDB');
-        const cursor = db.collection('Users').find({ userID: req.body.userID });
-        if (cursor.userID == req.body.userID && cursor.password === req.body.password) {
+        const cursor = db.collection('Users').find({ userID: parseInt(req.body.userID) });
+        if (cursor.password === req.body.password) {
             user = cursor;
             res.render('dashboard', { status: user });
         }
