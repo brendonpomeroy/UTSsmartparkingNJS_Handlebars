@@ -48,10 +48,10 @@ router.post('/login', function(req, res, next) {
         const cursor = db.collection('Users').find({ userID: req.body.userID });
         if (cursor.userID == req.body.userID && cursor.password === req.body.password) {
             user = cursor;
-            res.redirect('/dashboard', { status: 'success' });
+            res.render('/dashboard', { status: 'success' });
         }
     });
-    res.redirect('/dashboard', { status: 'fail' });
+    res.render('/dashboard', { status: 'fail' });
 });
 
 router.get('/get-users', function(req, res, next) { //list all users
