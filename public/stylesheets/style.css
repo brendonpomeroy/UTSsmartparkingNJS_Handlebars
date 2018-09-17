@@ -110,6 +110,14 @@ th, td {
   width: 500px;
 }
 
+.true {
+  background-color: lightslategrey;
+}
+
+.false {
+  background-color: aquamarine;
+}
+
 /*
 .footer {
   background-color: black;
