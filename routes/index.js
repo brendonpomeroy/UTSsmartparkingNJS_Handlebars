@@ -51,7 +51,7 @@ router.post('/login', function(req, res, next) {
             res.render('dashboard', { status: 'success' });
         }
     });
-    res.render('/dashboard', { status: 'fail' });
+    res.render('dashboard', { status: 'fail' });
 });
 
 router.get('/get-users', function(req, res, next) { //list all users
