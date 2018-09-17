@@ -39,10 +39,11 @@ router.post('/login', function(req, res, next) {
         var cursor = db.collection('Users').find();
         cursor.each(function(err, document) {
             if (doc.userID == req.body.userID) {
-                res.redirect('/dashboard', { status: 'success' });
+                res.render('/dashboard', { status: 'success' });
             }
         });
-        res.redirect('/dashboard', { status: 'fail' });
+        res.render('/dashboard', { status: 'fail' });
+        client.close();
     });
 
     /*mongo.connect(url, function(err, client) {
