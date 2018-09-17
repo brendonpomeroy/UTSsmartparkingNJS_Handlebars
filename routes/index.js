@@ -38,7 +38,7 @@ router.post('/login', function(req, res, next) {
         var db = client.db('carParkDB');
         var cursor = db.collection('Users').find();
         cursor.forEach(function(err, document) {
-            if (doc.userID == req.body.userID) {
+            if (document.userID == req.body.userID) {
                 res.render('/dashboard', { status: 'success' });
             }
         });
