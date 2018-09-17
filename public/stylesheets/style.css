@@ -103,6 +103,14 @@ th, td {
   color:red;
 }
 
+.bookSelection {
+  border: 1px;
+  border-color: lightgrey;
+  display: none;
+  width: 500px;
+}
+
+/*
 .footer {
   background-color: black;
   margin: 0;
@@ -113,3 +121,4 @@ th, td {
   bottom: 0;
   left: 0;
 }
+*/
