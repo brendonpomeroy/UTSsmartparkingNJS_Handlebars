@@ -58,7 +58,7 @@ router.get('/getSpaces', function(req, res) {
                 spaceID: doc.spaceID
             };
 */
-            bookings.push(document); //add the document to the spaces array
+            bookings.push(doc); //add the document to the spaces array
         }, function() {
             client.close();// must be here due to node.js being asynchronous // must close the client from mongo version 3.0+
             res.render('bookSpace', { spaces: spaces, bookings: bookings});
