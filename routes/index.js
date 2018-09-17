@@ -164,21 +164,20 @@ function getUsers() {
 
 function filterSpaces(spaces, bookings) {
     var newSpaces = [];
-    for each (var space in spaces) {
+    spaces.forEach(function(space) {
         var timeSlots = [];
-        for each (var booking in bookings) {
+        bookings.forEach(function(booking) {
             if (booking.spaceID == space.spaceID){
-                for(var i = 7; i < 22) {
+                for(var i = 7; i < 22; i++) {
                     if (i >= booking.timeFrom && i <= booking.timeTo ) {
                         timeSlots.push(false);
                     }
                     else {
                         timeSlots.push(true);
                     }
-                    i++;
                 }
             }
-        }
+        });
         newSpace = {
             spaceID: space.spaceID,
             spaceType: space.spaceType,
@@ -186,7 +185,7 @@ function filterSpaces(spaces, bookings) {
         }
         newSpaces.push(newSpace);
 
-    }
+    });
     return newSpaces;
 }
 
