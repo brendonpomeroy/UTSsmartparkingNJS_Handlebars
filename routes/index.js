@@ -48,7 +48,7 @@ router.post('/login', function(req, res) {
         const cursor = db.collection('Users').find({ userID: req.body.userID });
         if (cursor.userID == req.body.userID && cursor.password === req.body.password) {
             user = cursor;
-            res.render('dashboard', { status: user });
+            //res.render('dashboard', { status: user });
         }
         res.render('index', { status: "Please check your details." });
     });
