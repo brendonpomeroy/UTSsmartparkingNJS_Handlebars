@@ -30,6 +30,11 @@ router.get('/manageUsers', function(req, res) {
     res.render('manageUsers')
 });
 
+
+//Get spaces is triggered by a user clicking the day options, the function then
+//opens the database Spaces collection and stores it in a list temporarily
+//the Bookings are then queried with the .find() function ***this will need the correct date added***
+//the booking collection is also stored in a temporary list and sent filterSpaces() to remove private data.
 router.get('/getSpaces', function(req, res) {
     let spaces = [];
     let bookings = [];
@@ -51,14 +56,7 @@ router.get('/getSpaces', function(req, res) {
         const cursor = db.collection('Bookings').find(); //essentially an iterator
         cursor.forEach(function(doc, err) { // doc is the variable we want -> document (like an SQL entry)
             assert.equal(null, err); // check for an error
-/*
-            let booking = {
-                timeFrom: doc.timeFrom,
-                timeTo: doc.timeTo,
-                spaceID: doc.spaceID
-            };
-*/
-            bookings.push(doc); //add the document to the spaces array
+            bookings.push(doc); //add the document to the bookings array array
         }, function() {
             client.close();// must be here due to node.js being asynchronous // must close the client from mongo version 3.0+
             res.render('bookSpace', { spaces: filterSpaces(spaces, bookings) });
@@ -68,17 +66,14 @@ router.get('/getSpaces', function(req, res) {
 
 });
 
+
+//This is the log in Functionality. The users login data is received using post and accessed with req (request)
+//The data base is opened and the User collection is used to verify the users ID and password. a session is then
+//created and tracked using cookies.
+//INCOMPLETE
+//Issues: the user object cannot be found, could this be a type mismatch?
 router.post('/login', function(req, res) {
     let user;
-
-    /*mongo.connect(url, function(err, client) {
-
-        var db = client.db('carParkDB');
-        var cursor = db.collection('Users').find({ userID: req.body.userID });
-
-        res.render('/dashboard', { status: 'fail' });
-        client.close();
-    });*/
 
     mongo.connect(url, function(err, client) {
         assert.equal(null, err);
@@ -94,6 +89,9 @@ router.post('/login', function(req, res) {
     //res.render('dashboard', { status: 'fail' });
 });
 
+
+//This Function is used to simply list all the users. this is useful for administrator rights.
+//Has no functionality to stop user passwords being sent to the client.
 router.get('/get-users', function(req, res, next) { //list all users
     let users = [];
     mongo.connect(url, function(err, client) {
@@ -110,7 +108,11 @@ router.get('/get-users', function(req, res, next) { //list all users
     });
 });
 
-router.post('/insert-user', function(req, res, next) { //not working *******************************************
+
+//This function is used to add a user to the database.
+//This function takes the form input, opens the data base user collection and inserts a User Document.
+//Current work in Progress. INCOMPLETE
+router.post('/insert-user', function(req, res, next) {
     let user = {
         userID: parseInt(req.body.userID),
         name: req.body.name,
@@ -150,6 +152,10 @@ router.post('/delete', function(req, res, next) {
 
 });
 
+
+// old function to gather users, not sure if it has a use yet.
+// This function opens the data base and pulls the user collection and RETURNS A LIST.
+//INCOMPLETE
 function getUsers() {
     var users = [];
     mongo.connect(url, function(err, client) {
@@ -162,10 +168,16 @@ function getUsers() {
     });
 }
 
+
+//this function removes personal booking data from the list that will be sent to the client browser.
+//This function takes an array of spaces and an array of bookings that have been pulled from the database
+// It will then go through and grab only the rellivant information to be displayed to the client.
+// It only keeps the space id, type and a list of booleans which represent the operating hours and if
+// the space is available. RETURNS A LIST.
 function filterSpaces(spaces, bookings) {
-    var newSpaces = [];
+    let newSpaces = [];
     spaces.forEach(function(space) {
-        var timeSlots = [];
+        let timeSlots = [];
         bookings.forEach(function(booking) {
             if (booking.spaceID == space.spaceID){
                 for(var i = 7; i < 22; i++) {
@@ -182,7 +194,7 @@ function filterSpaces(spaces, bookings) {
             spaceID: space.spaceID,
             spaceType: space.spaceType,
             bookings: timeSlots
-        }
+        };
         newSpaces.push(newSpace);
 
     });

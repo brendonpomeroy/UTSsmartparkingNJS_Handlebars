@@ -53,16 +53,10 @@
         {{# each spaces }}
             <tr>
                 <td>Space ID: {{ this.spaceID }} </td>
-                <td>Location ID: {{this.locationID }} </td>
                 <td>Space Type: {{this.spaceType }} </td>
-            </tr>
-        {{/each }}
-
-        {{# each bookings }}
-            <tr>
-                <td>Space ID: {{ this.spaceID }} </td>
-                <td>Time From: {{this.timeFrom }} </td>
-                <td>Time To: {{this.timeTo }} </td>
+                {{# each this.timeslots }}
+                    <td class="{{this}}"></td>
+                {{/each }}
             </tr>
         {{/each }}
 
