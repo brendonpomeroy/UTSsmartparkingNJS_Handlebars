@@ -70,6 +70,10 @@ li a:hover {
   cursor: pointer;
 }
 
+#loginAlert{
+  color:red;
+}
+
 .footer {
   background-color: black;
   margin: 0;

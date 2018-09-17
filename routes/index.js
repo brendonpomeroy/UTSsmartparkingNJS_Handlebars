@@ -50,7 +50,7 @@ router.post('/login', function(req, res, next) {
             user = cursor;
             res.render('dashboard', { status: user });
         }
-        //res.render('dashboard', { status: "oh no" });
+        res.render('index', { status: "Please check your details." });
     });
     //res.render('dashboard', { status: 'fail' });
 });
