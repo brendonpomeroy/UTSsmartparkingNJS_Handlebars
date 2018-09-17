@@ -164,9 +164,9 @@ function getUsers() {
 
 function filterSpaces(spaces, bookings) {
     var newSpaces = [];
-    for (var space in spaces) {
+    for each (var space in spaces) {
         var timeSlots = [];
-        for (var booking in bookings) {
+        for each (var booking in bookings) {
             if (booking.spaceID == space.spaceID){
                 for(var i = 7; i < 22) {
                     if (i >= booking.timeFrom && i <= booking.timeTo ) {
