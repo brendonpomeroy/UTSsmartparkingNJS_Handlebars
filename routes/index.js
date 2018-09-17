@@ -51,20 +51,21 @@ router.get('/getSpaces', function(req, res) {
         const cursor = db.collection('Bookings').find(); //essentially an iterator
         cursor.forEach(function(doc, err) { // doc is the variable we want -> document (like an SQL entry)
             assert.equal(null, err); // check for an error
-
+/*
             let booking = {
                 timeFrom: doc.timeFrom,
                 timeTo: doc.timeTo,
                 spaceID: doc.spaceID
             };
-
-            bookings.push(booking); //add the document to the spaces array
+*/
+            bookings.push(document); //add the document to the spaces array
         }, function() {
             client.close();// must be here due to node.js being asynchronous // must close the client from mongo version 3.0+
+            res.render('bookSpace', { spaces: spaces, bookings: bookings});
         });
     });
 
-    res.render('bookSpace', { spaces: spaces, bookings: bookings});
+
 });
 
 router.post('/login', function(req, res) {
