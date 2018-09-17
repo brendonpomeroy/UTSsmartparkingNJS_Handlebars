@@ -30,7 +30,7 @@ router.get('/manageUsers', function(req, res) {
     res.render('manageUsers')
 });
 
-router.post('/login', function(req, res, next) {
+router.post('/login', function(req, res) {
     let user;
 
     /*mongo.connect(url, function(err, client) {
