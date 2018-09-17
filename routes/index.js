@@ -50,9 +50,9 @@ router.post('/login', function(req, res, next) {
             user = cursor;
             res.render('dashboard', { status: user });
         }
-        res.render('dashboard', { status: user });
+        res.render('dashboard', { status: "oh no" });
     });
-    res.render('dashboard', { status: 'fail' });
+    //res.render('dashboard', { status: 'fail' });
 });
 
 router.get('/get-users', function(req, res, next) { //list all users
