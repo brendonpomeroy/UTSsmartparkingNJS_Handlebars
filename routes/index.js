@@ -83,7 +83,7 @@ router.post('/login', function(req, res) {
             user = cursor;
             res.render('dashboard', { status: user });
         }
-
+        res.render('dashboard');
         res.render('index', { layout: false, status: "Please check your details."});
     });
     //res.render('dashboard', { status: 'fail' });
