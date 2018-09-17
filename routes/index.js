@@ -30,6 +30,43 @@ router.get('/manageUsers', function(req, res) {
     res.render('manageUsers')
 });
 
+router.get('/getSpaces', function(req, res) {
+    let spaces = [];
+    let bookings = [];
+    mongo.connect(url, function(err, client) {
+        assert.equal(null, err);
+        var db = client.db('carParkDB'); // new variable version 3.0+ (connection loads client -> this stores the database)
+        const cursor = db.collection('Spaces').find(); //essentially an iterator
+        cursor.forEach(function(doc, err) { // doc is the variable we want -> document (like an SQL entry)
+            assert.equal(null, err); // check for an error
+            spaces.push(doc); //add the document to the spaces array
+        }, function() {
+            client.close();// must be here due to node.js being asynchronous // must close the client from mongo version 3.0+
+        });
+    });
+
+    mongo.connect(url, function(err, client) {
+        assert.equal(null, err);
+        var db = client.db('carParkDB'); // new variable version 3.0+ (connection loads client -> this stores the database)
+        const cursor = db.collection('Bookings').find(); //essentially an iterator
+        cursor.forEach(function(doc, err) { // doc is the variable we want -> document (like an SQL entry)
+            assert.equal(null, err); // check for an error
+
+            let booking = {
+                timeFrom: doc.timeFrom,
+                timeTo: doc.timeTo,
+                spaceID: doc.spaceID
+            };
+
+            bookings.push(booking); //add the document to the spaces array
+        }, function() {
+            client.close();// must be here due to node.js being asynchronous // must close the client from mongo version 3.0+
+        });
+    });
+
+    res.render('manageUsers', { spaces: spaces, bookings: bookings});
+});
+
 router.post('/login', function(req, res) {
     let user;
 
@@ -46,7 +83,7 @@ router.post('/login', function(req, res) {
         assert.equal(null, err);
         var db = client.db('carParkDB');
         const cursor = db.collection('Users').find({ userID: parseInt(req.body.userID) });
-        if (cursor.password === req.body.password) {
+        if (cursor.password == parseInt(req.body.password) ) {
             user = cursor;
             res.render('dashboard', { status: user });
         }
@@ -116,16 +153,12 @@ function getUsers() {
     var users = [];
     mongo.connect(url, function(err, client) {
         assert.equal(null, err);
-        var db = client.db('carParkDB'); // new variable ersion 3.0+ (connection loads client -> this stores the database)
-        const cursor = db.collection('Users').find(); //essentially an iterator
-        cursor.forEach(function(doc, err) { // doc is the variable we want -> document (like an SQL entry)
-            assert.equal(null, err); // check for an error
-            users.push(doc); //add the document to the users array
-        }, function() {
-            client.close();// must be here due to node.js being asynchronous // must close the client from mongo version 3.0+
-        });
+        var db = client.db('carParkDB');
+        const cursor = db.collection('Users').find({ });
+        users = cursor;
+
+        res.render('index', { layout: false, status: "Please check your details.", yo: cursor });
     });
-    return users;
 }
 
 module.exports = router;
