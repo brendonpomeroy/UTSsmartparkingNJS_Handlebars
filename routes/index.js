@@ -32,7 +32,20 @@ router.get('/manageUsers', function(req, res) {
 
 router.post('/login', function(req, res, next) {
     let user;
+
     mongo.connect(url, function(err, client) {
+
+        var db = client.db('carParkDB');
+        var cursor = db.collection('Users').find();
+        cursor.each(function(err, document) {
+            if (doc.userID == req.body.userID) {
+                res.redirect('/dashboard', { status: 'success' });
+            }
+        });
+        res.redirect('/dashboard', { status: 'fail' });
+    });
+
+    /*mongo.connect(url, function(err, client) {
         assert.equal(null, err);
         var db = client.db('carParkDB');
         const cursor = db.collection('Users').find({ userID: req.body.userID });
@@ -41,14 +54,14 @@ router.post('/login', function(req, res, next) {
             res.redirect('/dashboard', { status: 'success' });
         }
     });
-    res.redirect('/dashboard', { status: 'fail' });
+    res.redirect('/dashboard', { status: 'fail' });*/
 });
 
 router.get('/get-users', function(req, res, next) { //list all users
     let users = [];
     mongo.connect(url, function(err, client) {
         assert.equal(null, err);
-        var db = client.db('carParkDB'); // new variable ersion 3.0+ (connection loads client -> this stores the database)
+        var db = client.db('carParkDB'); // new variable version 3.0+ (connection loads client -> this stores the database)
         const cursor = db.collection('Users').find(); //essentially an iterator
         cursor.forEach(function(doc, err) { // doc is the variable we want -> document (like an SQL entry)
             assert.equal(null, err); // check for an error
@@ -60,7 +73,7 @@ router.get('/get-users', function(req, res, next) { //list all users
     });
 });
 
-router.post('/insert-user', function(req, res, next) {
+router.post('/insert-user', function(req, res, next) { //not working *******************************************
     let user = {
         userID: parseInt(req.body.userID),
         name: req.body.name,
@@ -75,7 +88,7 @@ router.post('/insert-user', function(req, res, next) {
     mongo.connect(url, function(err, client){
         assert().equal(null, err);
         var db = client.db('carParkDB');
-        db.collection('Users').insert(user);
+        db.collection('Users').insertOne(user);
         client.close();
     });
     res.redirect('/manageUsers');
