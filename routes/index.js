@@ -61,7 +61,7 @@ router.get('/getSpaces', function(req, res) {
             bookings.push(doc); //add the document to the spaces array
         }, function() {
             client.close();// must be here due to node.js being asynchronous // must close the client from mongo version 3.0+
-            res.render('bookSpace', { spaces: spaces, bookings: bookings});
+            res.render('bookSpace', { spaces: filterSpaces(spaces, bookings) });
         });
     });
 
@@ -160,6 +160,34 @@ function getUsers() {
 
         res.render('index', { layout: false, status: "Please check your details.", yo: cursor });
     });
+}
+
+function filterSpaces(spaces, bookings) {
+    var newSpaces = [];
+    for (var space in spaces) {
+        var timeSlots = [];
+        for (var booking in bookings) {
+            if (booking.spaceID == space.spaceID){
+                for(var i = 7; i < 22) {
+                    if (i >= booking.timeFrom && i <= booking.timeTo ) {
+                        timeSlots.push(false);
+                    }
+                    else {
+                        timeSlots.push(true);
+                    }
+                    i++;
+                }
+            }
+        }
+        newSpace = {
+            spaceID: space.spaceID,
+            spaceType: space.spaceType,
+            bookings: timeSlots
+        }
+        newSpaces.push(newSpace);
+
+    }
+    return newSpaces;
 }
 
 module.exports = router;
