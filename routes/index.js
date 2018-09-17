@@ -33,20 +33,16 @@ router.get('/manageUsers', function(req, res) {
 router.post('/login', function(req, res, next) {
     let user;
 
-    mongo.connect(url, function(err, client) {
+    /*mongo.connect(url, function(err, client) {
 
         var db = client.db('carParkDB');
-        var cursor = db.collection('Users').find();
-        cursor.forEach(function(err, document) {
-            if (document.userID == req.body.userID) {
-                res.render('/dashboard', { status: 'success' });
-            }
-        });
+        var cursor = db.collection('Users').find({ userID: req.body.userID });
+
         res.render('/dashboard', { status: 'fail' });
         client.close();
-    });
+    });*/
 
-    /*mongo.connect(url, function(err, client) {
+    mongo.connect(url, function(err, client) {
         assert.equal(null, err);
         var db = client.db('carParkDB');
         const cursor = db.collection('Users').find({ userID: req.body.userID });
@@ -55,7 +51,7 @@ router.post('/login', function(req, res, next) {
             res.redirect('/dashboard', { status: 'success' });
         }
     });
-    res.redirect('/dashboard', { status: 'fail' });*/
+    res.redirect('/dashboard', { status: 'fail' });
 });
 
 router.get('/get-users', function(req, res, next) { //list all users
