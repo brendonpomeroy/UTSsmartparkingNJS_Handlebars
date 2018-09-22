@@ -125,7 +125,7 @@ router.get('/getSpaces', function(req, res) {
     //if (req.body.day == "Today")
     Console.log(req.body.day);
 
-    bookingsModel.find({ date: date }, function(err, bookingsDB) {
+    bookingModel.find({ date: date }, function(err, bookingsDB) {
         if(err) {
             console.log(err);
         } else {
