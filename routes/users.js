@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
-mongoose.connect("mongodb+srv://System:utssmartparking@parkdb-fez7r.mongodb.net/");
+mongoose.connect("mongodb+srv://System:utssmartparking@parkdb-fez7r.mongodb.net/parkDB?retryWrites=true");
 
 var userSchema = new Schema({
     userID: Number,
@@ -48,7 +48,7 @@ router.get('/getUsers', function(req, res, next) {
             console.log(err);
             res.status(500).send();
         } else {
-            res.render('/dashboard', { status: "success", items: usersDB } )
+            res.render('/dashboard', { status: "success", items: userDB } )
         }
     });
 
