@@ -3,7 +3,7 @@ var router = express.Router();
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 mongoose.connect("mongodb+srv://System:utssmartparking@parkdb-fez7r.mongodb.net/carParkDB?retryWrites=true");
-
+/*
 var userSchema = new Schema({
     userID: Number,
     name: String,
@@ -11,7 +11,7 @@ var userSchema = new Schema({
     email: String,
     userType: String,
     password: String
-});
+});*/
 
 var userModel = mongoose.model('Users', userSchema);
 
