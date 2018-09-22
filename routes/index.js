@@ -182,7 +182,7 @@ router.post('/deleteUser', function(req, res, next) {
 //Add a new user to the data base
 router.post('/addUser', function(req, res, next) {
 
-    var newUser = new userModel(); //must create a new instance of the model when creating a user.
+    let newUser = new userModel(); //must create a new instance of the model when creating a user.
     newUser.userID = parseInt(req.body.userID); //according to sschema this needs to be a number
     newUser.name = req.body.name;
     newUser.phone = parseInt(req.body.phone);
