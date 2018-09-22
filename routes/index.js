@@ -171,7 +171,7 @@ function getUsers() {
 
 //this function removes personal booking data from the list that will be sent to the client browser.
 //This function takes an array of spaces and an array of bookings that have been pulled from the database
-// It will then go through and grab only the rellivant information to be displayed to the client.
+// It will then go through and grab only the relivant information to be displayed to the client.
 // It only keeps the space id, type and a list of booleans which represent the operating hours and if
 // the space is available. RETURNS A LIST.
 function filterSpaces(spaces, bookings) {
