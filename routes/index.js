@@ -122,8 +122,11 @@ router.get('/getSpaces', function(req, res) {
     });*/
 
     var date;
-    //if (req.body.day == "Today")
-    Console.log(req.body.day);
+    var todaysDate = new Date();
+    if (req.body.day == "Today") {
+        date = todaysDate.getDate().toString() + todaysDate.getDay().toString() + todaysDate.getFullYear().toString();
+        console.log(date);
+    }
 
     bookingModel.find({ date: date }, function(err, bookingsDB) {
         if(err) {
