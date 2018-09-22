@@ -123,11 +123,11 @@ router.get('/getSpaces', function(req, res) {
 
     let date;
     let todaysDate = new Date();
-    if (req.body.day == "Today") {
+    if (req.get.day == "Today") {
         date = todaysDate.getDate().toString() + todaysDate.getDay().toString() + todaysDate.getFullYear().toString();
         console.log(date);
     }
-    console.log(req.body.day);
+    console.log(req.get.day);
 
     bookingModel.find({ date: date }, function(err, bookingsDB) {
         if(err) {
