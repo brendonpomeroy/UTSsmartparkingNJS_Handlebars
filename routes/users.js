@@ -17,7 +17,7 @@ var userModel = mongoose.model('Users', userSchema);
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
-    res.render('/dashboard', { status: "users router."});
+    res.render('./dashboard', { status: "users router."});
 });
 
 router.post('/addUser', function(req, res, next) {
@@ -35,7 +35,7 @@ router.post('/addUser', function(req, res, next) {
             console.log(err);
             res.status(500).send();
         } else {
-            res.render('/dashboard', { status: "success"} )
+            res.render('./dashboard', { status: "success"} )
         }
     });
 });
@@ -48,7 +48,7 @@ router.get('/getUsers', function(req, res, next) {
             console.log(err);
             res.status(500).send();
         } else {
-            res.render('/dashboard', { status: "success", items: userDB } )
+            res.render('./dashboard', { status: "success", items: userDB } )
         }
     });
 
