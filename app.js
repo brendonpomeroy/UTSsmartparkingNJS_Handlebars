@@ -17,6 +17,7 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+app.use(session({secret:"topsecretMustBeChangedInProductionvdsjng23i52goijw9eti943tigjdof94",resave: false, saveUninitialized: true}));
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);

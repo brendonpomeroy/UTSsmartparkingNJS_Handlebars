@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
+var session = require('express-session');
 mongoose.connect("mongodb+srv://System:utssmartparking@parkdb-fez7r.mongodb.net/carParkDB?retryWrites=true");
 
 var userSchema = new Schema({
@@ -37,7 +38,11 @@ router.get('/bookings', function(req, res, next) {
 });
 
 router.get('/account', function(req, res, next) {
-    res.render('account', { title: 'Account' });
+    if (!req.session.user) {
+        res.render('index');
+    }
+
+    res.render('account', { user: req.session.user });
 });
 
 router.get('/manageUsers', function(req, res) {
@@ -85,7 +90,7 @@ router.get('/getSpaces', function(req, res) {
 //The data base is opened and the User collection is used to verify the users ID and password. a session is then
 //created and tracked using cookies.
 //INCOMPLETE
-//Issues: the user object cannot be found, could this be a type mismatch?
+//Issues:
 router.post('/login', function(req, res) {
     let user;
 
@@ -97,22 +102,11 @@ router.post('/login', function(req, res) {
         if (!user) {
             res.render('dashboard', { status: "not valid" } )
         }
-
+        req.session.user = user;
         res.render('dashboard', { status: "success", user: user.name } )
 
+
     });
-    /*mongo.connect(url, function(err, client) {
-        assert.equal(null, err);
-        var db = client.db('carParkDB');
-        const cursor = db.collection('Users').find({ userID: parseInt(req.body.userID) });
-        if (cursor.password == parseInt(req.body.password) ) {
-            user = cursor;
-            res.render('dashboard', { status: user });
-        }
-        res.render('dashboard');
-        res.render('index', { layout: false, status: "Please check your details."});
-    });
-    //res.render('dashboard', { status: 'fail' });*/
 });
 
 
