@@ -4,9 +4,9 @@ var mongoose = require('mongoose');
 mongoose.connect("mongodb+srv://System:utssmartparking@parkdb-fez7r.mongodb.net/");
 
 var userSchema = mongoose.schema({
-    userID: int,
+    userID: Number,
     name: String,
-    phone: int,
+    phone: Number,
     email: String,
     userType: String,
     password: String
