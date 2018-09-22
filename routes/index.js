@@ -10,7 +10,7 @@ var bookingSchema = new Schema({
     bookingID: Number,
     userID: Number,
     spaceID: Number,
-    date: Date,
+    date: String,
     timeFrom: Number,
     timeTo: Number
 });
@@ -95,6 +95,7 @@ router.get('/manageUsers', function(req, res) {
 router.get('/getSpaces', function(req, res) {
     let spaces = [];
     let bookings = [];
+    /*
     mongo.connect(url, function(err, client) {
         assert.equal(null, err);
         var db = client.db('carParkDB'); // new variable version 3.0+ (connection loads client -> this stores the database)
@@ -118,25 +119,28 @@ router.get('/getSpaces', function(req, res) {
             client.close();// must be here due to node.js being asynchronous // must close the client from mongo version 3.0+
             res.render('bookSpace', { spaces: filterSpaces(spaces, bookings) });
         });
-    });
+    });*/
 
-    /*
-    bookingsModel.find({}, function(err, bookingsDB) {
+    var date;
+    //if (req.body.day == "Today")
+    Console.log(req.body.day);
+
+    bookingsModel.find({ date: date }, function(err, bookingsDB) {
         if(err) {
             console.log(err);
         } else {
            bookings = bookingsDB;
         }
     });
-    userModel.find({}, function(err, userDB) {
+    spaceModel.find({}, function(err, spaceDB) {
         if(err) {
             console.log(err);
         } else {
-           users = userDB;
+           spaces = spaceDB;
         }
     });
     res.render('bookSpace', { spaces: filterSpaces(spaces, bookings) }); //may need some sequential support
-    */
+
 
 
 });
@@ -161,70 +165,6 @@ router.post('/login', function(req, res) {
 
 
     });
-});
-
-
-//This Function is used to simply list all the users. this is useful for administrator rights.
-//Has no functionality to stop user passwords being sent to the client.
-router.get('/get-users', function(req, res, next) { //list all users
-    let users = [];
-
-    userModel.find({}, function(err, userDB) {
-        if(err) {
-            console.log(err);
-        } else {
-            res.render('./dashboard', { status: "success", items: userDB } )
-        }
-    });
-
-    /*mongo.connect(url, function(err, client) {
-        assert.equal(null, err);
-        var db = client.db('carParkDB'); // new variable version 3.0+ (connection loads client -> this stores the database)
-        const cursor = db.collection('Users').find(); //essentially an iterator
-        cursor.forEach(function(doc, err) { // doc is the variable we want -> document (like an SQL entry)
-            assert.equal(null, err); // check for an error
-            users.push(doc); //add the document to the users array
-        }, function() {
-            client.close();// must be here due to node.js being asynchronous // must close the client from mongo version 3.0+
-            res.render('manageUsers', { items: users});
-        });
-    });*/
-});
-
-
-//This function is used to add a user to the database.
-//This function takes the form input, opens the data base user collection and inserts a User Document.
-//Current work in Progress. INCOMPLETE ****************  old function -> addUser  ************************************
-router.post('/insert-user', function(req, res, next) {
-    let user = {
-        userID: parseInt(req.body.userID),
-        name: req.body.name,
-        phone: req.body.phone,
-        email: req.body.email,
-        password: req.body.password,
-        usertype: req.body.usertype
-    };
-    console.log("User created: " + user.name);
-
-
-    mongo.connect(url, function(err, client){
-        assert().equal(null, err);
-        var db = client.db('carParkDB');
-        db.collection('Users').insertOne(user);
-        client.close();
-    });
-    res.redirect('/manageUsers');
-
-    /*mongo.connect(url, function(err, client){
-        assert().equal(null, err);
-        var db = client.db('carParkDB');
-        db.collection('Users').insertOne(user, function(err, result) {
-            assert(null, err);
-            console.log('user added.');
-            client.close();
-        });
-    });
-    res.redirect('/manageUsers');*/
 });
 
 router.post('/updateUser', function(req, res, next) {
@@ -256,14 +196,6 @@ router.post('/addUser', function(req, res, next) {
         }
     });
 });
-
-
-// old function to gather users, not sure if it has a use yet.
-// This function opens the data base and pulls the user collection and RETURNS A LIST.
-//INCOMPLETE
-function getUsers() {
-
-}
 
 
 //this function removes personal booking data from the list that will be sent to the client browser.

@@ -4,12 +4,16 @@
     <h1>Make a Booking</h1>
     <div id="searchController">
         <form method="get" action="/getSpaces">
-            <div class="dayWrapper">
-                <input type="submit" name="day" id="todayButton" class="buttons" value="Today">
+                <input type="hidden" id="day" value="today">
+            <input type="submit" name="day" id="todayButton" class="buttons" value="Today">
+        </form>
+        <form method="get" action="/getSpaces">
+            <input type="hidden" id="day" value="tomorrow">
                 <input type="submit" name="day" id="tomorrowButton" class="buttons" value="Tomorrow">
+        </form>
+        <form method="get" action="/getSpaces">
                 <input type="submit" name="day" id="thirdDayButton" class="buttons" value="">
-                <input type="hidden" id="selectedDay" value="<% out.println(day); %>">
-            </div>
+
         </form>
 
     </div>
