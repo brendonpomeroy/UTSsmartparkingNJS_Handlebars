@@ -1,9 +1,23 @@
 var express = require('express');
 var router = express.Router();
-var mongo = require('mongodb').MongoClient;
-var assert = require('assert');
+var mongoose = require('mongoose');
+var Schema = mongoose.Schema;
+mongoose.connect("mongodb+srv://System:utssmartparking@parkdb-fez7r.mongodb.net/carParkDB?retryWrites=true");
 
-var url = "mongodb+srv://System:utssmartparking@parkdb-fez7r.mongodb.net/";
+var userSchema = new Schema({
+    userID: Number,
+    name: String,
+    phone: Number,
+    email: String,
+    userType: String,
+    password: String
+});
+
+var userModel = mongoose.model('Users', userSchema);
+
+//var mongo = require('mongodb').MongoClient;
+//var assert = require('assert');
+//var url = "mongodb+srv://System:utssmartparking@parkdb-fez7r.mongodb.net/";
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -75,7 +89,19 @@ router.get('/getSpaces', function(req, res) {
 router.post('/login', function(req, res) {
     let user;
 
-    mongo.connect(url, function(err, client) {
+    userModel.findOne({ userID: parseInt(req.body.userID), password: req.body.password}, function(err, user) {
+        if(err) {
+            console.log(err);
+            res.render('dashboard', { status: "error" } )
+        }
+        if (!user) {
+            res.render('dashboard', { status: "not valid" } )
+        }
+
+        res.render('dashboard', { status: "success", user: user.name } )
+
+    });
+    /*mongo.connect(url, function(err, client) {
         assert.equal(null, err);
         var db = client.db('carParkDB');
         const cursor = db.collection('Users').find({ userID: parseInt(req.body.userID) });
@@ -86,7 +112,7 @@ router.post('/login', function(req, res) {
         res.render('dashboard');
         res.render('index', { layout: false, status: "Please check your details."});
     });
-    //res.render('dashboard', { status: 'fail' });
+    //res.render('dashboard', { status: 'fail' });*/
 });
 
 
@@ -152,20 +178,33 @@ router.post('/delete', function(req, res, next) {
 
 });
 
+router.post('/addUser', function(req, res, next) {
+
+    var newUser = new userModel();
+    newUser.userID = parseInt(req.body.userID);
+    newUser.name = req.body.name;
+    newUser.phone = parseInt(req.body.phone);
+    newUser.email = req.body.email;
+    newUser.userType = req.body.usertype;
+    newUser.password = req.body.password;
+
+    newUser.save(function(err, addedUser) {
+        if (err) {
+            console.log(err);
+            res.status(500).send();
+        } else {
+            //console.log('User added: ' + addedUser.name())
+            res.render('./dashboard', { status: "success"} )
+        }
+    });
+});
+
 
 // old function to gather users, not sure if it has a use yet.
 // This function opens the data base and pulls the user collection and RETURNS A LIST.
 //INCOMPLETE
 function getUsers() {
-    var users = [];
-    mongo.connect(url, function(err, client) {
-        assert.equal(null, err);
-        var db = client.db('carParkDB');
-        const cursor = db.collection('Users').find({ });
-        users = cursor;
 
-        res.render('index', { layout: false, status: "Please check your details.", yo: cursor });
-    });
 }
 
 
