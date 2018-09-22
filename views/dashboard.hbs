@@ -1,3 +1,25 @@
 <h1>Dashboard</h1>
 
 Status: {{{ status }}}
+
+Users:
+{{# each items }}
+    <article class="users">
+        <div>
+            UserID: {{ this.userID }}
+        </div>
+        <div>
+            Name: {{ this.name }}
+        </div>
+        <div>
+            Phone: {{ this.phone }}
+        </div>
+        <div>
+            Email: {{ this.email }}
+        </div>
+        <div>
+            User Type: {{ this.usertype }}
+        </div>
+
+    </article>
+{{/each }}

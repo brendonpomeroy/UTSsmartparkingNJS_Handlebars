@@ -40,4 +40,18 @@ router.post('/addUser', function(req, res, next) {
     });
 });
 
+router.get('/getUsers', function(req, res, next) {
+
+    //var users = [];
+    userModel.find({}, function(err, userDB) {
+        if(err) {
+            console.log(err);
+            res.status(500).send();
+        } else {
+            res.render('/dashboard', { status: "success", items: usersDB } )
+        }
+    });
+
+});
+
 module.exports = router;
