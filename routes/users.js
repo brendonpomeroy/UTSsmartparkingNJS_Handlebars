@@ -27,7 +27,7 @@ router.post('/addUser', function(req, res, next) {
     newUser.name = req.body.name;
     newUser.phone = parseInt(req.body.phone);
     newUser.email = req.body.email;
-    newUser.userType = req.body.userType;
+    newUser.userType = req.body.usertype;
     newUser.password = req.body.password;
 
     newUser.save(function(err, addedUser) {
