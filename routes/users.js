@@ -35,7 +35,7 @@ router.post('/addUser', function(req, res, next) {
             console.log(err);
             res.status(500).send();
         } else {
-            console.log('User added: ' + addedUser.name())
+            //console.log('User added: ' + addedUser.name())
             res.render('./dashboard', { status: "success"} )
         }
     });
