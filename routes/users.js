@@ -1,8 +1,8 @@
 var express = require('express');
 var router = express.Router();
-var mongoose = require('mongoose');
-var Schema = mongoose.Schema;
-mongoose.connect("mongodb+srv://System:utssmartparking@parkdb-fez7r.mongodb.net/carParkDB?retryWrites=true");
+//var mongoose = require('mongoose');
+//var Schema = mongoose.Schema;
+//mongoose.connect("mongodb+srv://System:utssmartparking@parkdb-fez7r.mongodb.net/carParkDB?retryWrites=true");
 /*
 var userSchema = new Schema({
     userID: Number,
@@ -11,11 +11,11 @@ var userSchema = new Schema({
     email: String,
     userType: String,
     password: String
-});*/
+});
 
 var userModel = mongoose.model('Users', userSchema);
 
-/* GET users listing. */
+/* GET users listing.
 router.get('/', function(req, res, next) {
     res.render('./dashboard', { status: "users router."});
 });
@@ -53,6 +53,6 @@ router.get('/getUsers', function(req, res, next) {
         }
     });
 
-});
+});*/
 
 module.exports = router;
