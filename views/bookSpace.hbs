@@ -4,16 +4,16 @@
     <h1>Make a Booking</h1>
     <div id="searchController">
         <form method="get" action="/getSpaces">
-                <input type="hidden" id="day" value="today">
+            <input type="hidden" id="day" value="1">
             <input type="submit" name="day" id="todayButton" class="buttons" value="Today">
         </form>
         <form method="get" action="/getSpaces">
-            <input type="hidden" id="day" value="tomorrow">
-                <input type="submit" name="day" id="tomorrowButton" class="buttons" value="Tomorrow">
+            <input type="hidden" id="day" value="2">
+            <input type="submit" name="day" id="tomorrowButton" class="buttons" value="Tomorrow">
         </form>
         <form method="get" action="/getSpaces">
-                <input type="submit" name="day" id="thirdDayButton" class="buttons" value="">
-
+            <input type="hidden" id="day" value="3">
+            <input type="submit" name="day" id="thirdDayButton" class="buttons" value="">
         </form>
 
     </div>

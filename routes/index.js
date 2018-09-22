@@ -123,7 +123,7 @@ router.get('/getSpaces', function(req, res) {
 
     var date;
     var todaysDate = new Date();
-    if ((req.body.day).trim() == "Today") {
+    if (parseInt(req.body.day) == 1) {
         date = todaysDate.getDate().toString() + todaysDate.getDay().toString() + todaysDate.getFullYear().toString();
         console.log(date);
     }
