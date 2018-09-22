@@ -2,8 +2,18 @@ var express = require('express');
 var router = express.Router();
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
-var session = require('express-session');
 mongoose.connect("mongodb+srv://System:utssmartparking@parkdb-fez7r.mongodb.net/carParkDB?retryWrites=true");
+
+
+//schemas define what data and how the data will exist in the database. These are strict and can only be defined once.
+var bookingSchema = new Schema({
+    bookingID: Number,
+    userID: Number,
+    spaceID: Number,
+    date: Date,
+    timeFrom: Number,
+    timeTo: Number
+});
 
 var userSchema = new Schema({
     userID: Number,
@@ -14,7 +24,23 @@ var userSchema = new Schema({
     password: String
 });
 
+var spaceSchema = new Schema({
+    spaceID: Number,
+    locationID: Number,
+    spaceType: String
+});
+
+var receiptSchema = new Schema({
+    receiptID: Number,
+    bookingID: Number,
+    date: Date
+});
+
+//Models what we use to access the data in the database.
 var userModel = mongoose.model('Users', userSchema);
+var bookingModel = mongoose.model('Bookings', bookingSchema);
+var spaceModel = mongoose.model('Spaces', spaceSchema);
+var receiptModel = mongoose.model('Receipts', receiptSchema);
 
 //var mongo = require('mongodb').MongoClient;
 //var assert = require('assert');
@@ -25,8 +51,12 @@ router.get('/', function(req, res, next) {
   res.render('index', { layout: false });
 });
 
+router.get('/pay', function(req, res) {
+    res.render('pay', { layout: false });
+});
+
 router.get('/dashboard', function(req, res, next) {
-    res.render('dashboard', { status: 'na' });
+    res.render('dashboard');
 });
 
 router.get('/bookSpace', function(req, res, next) {
@@ -46,7 +76,15 @@ router.get('/account', function(req, res, next) {
 });
 
 router.get('/manageUsers', function(req, res) {
-    res.render('manageUsers')
+    let users = [];
+
+    userModel.find({}, function(err, userDB) {
+        if(err) {
+            console.log(err);
+        } else {
+            res.render('manageUsers', { users: userDB } )
+        }
+    });
 });
 
 
@@ -82,6 +120,24 @@ router.get('/getSpaces', function(req, res) {
         });
     });
 
+    /*
+    bookingsModel.find({}, function(err, bookingsDB) {
+        if(err) {
+            console.log(err);
+        } else {
+           bookings = bookingsDB;
+        }
+    });
+    userModel.find({}, function(err, userDB) {
+        if(err) {
+            console.log(err);
+        } else {
+           users = userDB;
+        }
+    });
+    res.render('bookSpace', { spaces: filterSpaces(spaces, bookings) }); //may need some sequential support
+    */
+
 
 });
 
@@ -89,8 +145,6 @@ router.get('/getSpaces', function(req, res) {
 //This is the log in Functionality. The users login data is received using post and accessed with req (request)
 //The data base is opened and the User collection is used to verify the users ID and password. a session is then
 //created and tracked using cookies.
-//INCOMPLETE
-//Issues:
 router.post('/login', function(req, res) {
     let user;
 
@@ -114,7 +168,16 @@ router.post('/login', function(req, res) {
 //Has no functionality to stop user passwords being sent to the client.
 router.get('/get-users', function(req, res, next) { //list all users
     let users = [];
-    mongo.connect(url, function(err, client) {
+
+    userModel.find({}, function(err, userDB) {
+        if(err) {
+            console.log(err);
+        } else {
+            res.render('./dashboard', { status: "success", items: userDB } )
+        }
+    });
+
+    /*mongo.connect(url, function(err, client) {
         assert.equal(null, err);
         var db = client.db('carParkDB'); // new variable version 3.0+ (connection loads client -> this stores the database)
         const cursor = db.collection('Users').find(); //essentially an iterator
@@ -125,13 +188,13 @@ router.get('/get-users', function(req, res, next) { //list all users
             client.close();// must be here due to node.js being asynchronous // must close the client from mongo version 3.0+
             res.render('manageUsers', { items: users});
         });
-    });
+    });*/
 });
 
 
 //This function is used to add a user to the database.
 //This function takes the form input, opens the data base user collection and inserts a User Document.
-//Current work in Progress. INCOMPLETE
+//Current work in Progress. INCOMPLETE ****************  old function -> addUser  ************************************
 router.post('/insert-user', function(req, res, next) {
     let user = {
         userID: parseInt(req.body.userID),
@@ -164,18 +227,19 @@ router.post('/insert-user', function(req, res, next) {
     res.redirect('/manageUsers');*/
 });
 
-router.post('/update', function(req, res, next) {
+router.post('/updateUser', function(req, res, next) {
 
 });
 
-router.post('/delete', function(req, res, next) {
+router.post('/deleteUser', function(req, res, next) {
 
 });
 
+//Add a new user to the data base
 router.post('/addUser', function(req, res, next) {
 
-    var newUser = new userModel();
-    newUser.userID = parseInt(req.body.userID);
+    var newUser = new userModel(); //must create a new instance of the model when creating a user.
+    newUser.userID = parseInt(req.body.userID); //according to sschema this needs to be a number
     newUser.name = req.body.name;
     newUser.phone = parseInt(req.body.phone);
     newUser.email = req.body.email;

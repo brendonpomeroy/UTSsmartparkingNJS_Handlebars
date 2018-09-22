@@ -16,28 +16,24 @@
 
 <section class="users">
     <h2>Current Users</h2>
-    <a href="/get-users">Load Users</a>
-    <div>
 
-        {{# each items }}
-            <article class="users">
-                <div>
-                    UserID: {{ this.userID }}
-                </div>
-                <div>
-                    Name: {{ this.name }}
-                </div>
-                <div>
-                    Phone: {{ this.phone }}
-                </div>
-                <div>
-                    Email: {{ this.email }}
-                </div>
-                <div>
-                    User Type: {{ this.usertype }}
-                </div>
-
-            </article>
+        <table style="width:100%">
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Phone Number</th>
+            <th>Email</th>
+            <th>User Type</th>
+        </tr>
+            {{ each users}}
+            <tr>
+                <td> {{ this.userID }} </td>
+                <td> {{ this.name }} </td>
+                <td> {{ this.phone }} </td>
+                <td> {{ this.email }} </td>
+                <td> {{ this.userType }} </td>
+            </tr>
             {{/each }}
+        </table>
     </div>
 </section>
