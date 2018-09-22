@@ -1,9 +1,10 @@
 var express = require('express');
 var router = express.Router();
 var mongoose = require('mongoose');
+var Schema = mongoose.Schema;
 mongoose.connect("mongodb+srv://System:utssmartparking@parkdb-fez7r.mongodb.net/");
 
-var userSchema = mongoose.schema({
+var userSchema = new Schema({
     userID: Number,
     name: String,
     phone: Number,
