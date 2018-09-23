@@ -170,10 +170,10 @@ router.post('/login', function(req, res) {
             res.render('dashboard', { status: "error" } )
         }
         if (!user) {
-            res.render('dashboard', { status: "not valid" } )
+            res.render('index', { status: "Not valid a valid user" } )
         }
         req.session.user = user;
-        res.render('dashboard', { status: "success", user: user.name } )
+        res.render('dashboard')
 
 
     });
@@ -221,7 +221,7 @@ function filterSpaces(spaces, bookings) {
         let timeSlots = [];
         bookings.forEach(function(booking) {
             if (booking.spaceID == space.spaceID){
-                for(var i = 7; i < 22; i++) {
+                for(var i = 7; i <= 22; i++) {
                     if (i >= booking.timeFrom && i <= booking.timeTo ) {
                         timeSlots.push(false);
                     }
