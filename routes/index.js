@@ -124,13 +124,13 @@ router.get('/getSpaces', function(req, res) {
     let date;
     let todaysDate = new Date();
     if (req.query.day == "Today") {
-        date = todaysDate.getDate().toString() + "/" + todaysDate.getMonth().toString() + "/" + todaysDate.getFullYear().toString();
+        date = todaysDate.getDate().toString() + "/" + (todaysDate.getMonth()+1).toString() + "/" + todaysDate.getFullYear().toString();
     }
     else if (req.query.day == "Tomorrow") {
-        date = (todaysDate.getDate()+1).toString() + "/" + todaysDate.getMonth().toString() + "/" + todaysDate.getFullYear().toString();
+        date = (todaysDate.getDate()+1).toString() + "/" + (todaysDate.getMonth()+1).toString() + "/" + todaysDate.getFullYear().toString();
     }
     else {
-        date = (todaysDate.getDate()+2).toString() + "/" + todaysDate.getMonth().toString() + "/" + todaysDate.getFullYear().toString();
+        date = (todaysDate.getDate()+2).toString() + "/" + (todaysDate.getMonth()+1).toString() + "/" + todaysDate.getFullYear().toString();
     }
     console.log(date);
 
