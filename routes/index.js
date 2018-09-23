@@ -124,16 +124,22 @@ router.get('/getSpaces', function(req, res) {
     let date;
     let todaysDate = new Date();
     if (req.query.day == "Today") {
-        date = todaysDate.getDate().toString() + todaysDate.getDay().toString() + todaysDate.getFullYear().toString();
-        console.log(date);
+        date = todaysDate.getDate().toString() + "/" + todaysDate.getDay().toString() + "/" + todaysDate.getFullYear().toString();
     }
-    console.log(req.query.day);
+    else if (req.query.day == "Tomorrow") {
+        date = (todaysDate.getDate()+1).toString() + "/" + todaysDate.getDay().toString() + "/" + todaysDate.getFullYear().toString();
+    }
+    else {
+        date = (todaysDate.getDate()+2).toString() + "/" + todaysDate.getDay().toString() + "/" + todaysDate.getFullYear().toString();
+    }
+
 
     bookingModel.find({ date: date }, function(err, bookingsDB) {
         if(err) {
             console.log(err);
         } else {
-           bookings = bookingsDB;
+            console.log(bookingsDB[0]);
+            bookings = bookingsDB;
         }
     });
     spaceModel.find({}, function(err, spaceDB) {
