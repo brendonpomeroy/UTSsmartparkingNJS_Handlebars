@@ -1,5 +1,5 @@
 <h1>{{title}}</h1>
-
+<script>todaysDate = new Date();</script>
 <div id="bookWrapper">
     <h1>Make a Booking</h1>
     <div id="searchController">
@@ -14,6 +14,41 @@
         </form>
 
     </div>
+
+    <form>
+        <table>
+            <tr>
+            <td>
+                Space:
+            </td>
+                <td>
+                    <select>
+                        {{# each spaces}}
+                        <option>{{this.spaceID}}</option>
+                        {{/each}}
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Date:
+                </td>
+                <td>
+                    <select>
+                        <option>
+                            <script>document.write(todaysDate.getDate().toString() + "/" + (todaysDate.getMonth()+1).toString() + "/" + todaysDate.getFullYear().toString());</script>
+                        </option>
+                        <option>
+                            <script>document.write((todaysDate.getDate().toString()+1) + "/" + (todaysDate.getMonth()+1).toString() + "/" + todaysDate.getFullYear().toString());</script>
+                        </option>
+                        <option>
+                            <script>document.write((todaysDate.getDate().toString()+2) + "/" + (todaysDate.getMonth()+1).toString() + "/" + todaysDate.getFullYear().toString());</script>
+                        </option>
+                    </select>
+                </td>
+            </tr>
+        </table>
+    </form>
 
 
     <div id="bookSelection" class="bookSelection">
@@ -77,9 +112,6 @@
             <tr>
                 <td>{{ this.spaceID }} </td>
                 <td>{{this.spaceType }} </td>
-                {{# each timeSlots }}
-                    <td><div class="{{this}}"></div></td>
-                {{/each }}
             </tr>
         {{/each }}
 
