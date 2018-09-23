@@ -95,6 +95,7 @@ router.get('/manageUsers', function(req, res) {
 router.get('/getSpaces', function(req, res) {
     let spaces = [];
     let bookings = [];
+    let filteredSpaces = [];
     /*
     mongo.connect(url, function(err, client) {
         assert.equal(null, err);
@@ -150,6 +151,8 @@ router.get('/getSpaces', function(req, res) {
            spaces = spaceDB;
            console.log(spaces);
         }
+        filteredSpaces = filterSpaces(spaces, bookings);
+        console.log(filteredSpaces);
         res.render('bookSpace', { spaces: filterSpaces(spaces, bookings) }); //may need some sequential support
     });
 
@@ -170,7 +173,7 @@ router.post('/login', function(req, res) {
             res.render('dashboard', { status: "error" } )
         }
         if (!user) {
-            res.render('index', { status: "Not valid a valid user" } )
+            res.render('index', { layout: false, status: "Not valid a valid user" } )
         }
         req.session.user = user;
         res.render('dashboard')
