@@ -60,7 +60,24 @@ router.get('/dashboard', function(req, res, next) {
 });
 
 router.get('/bookSpace', function(req, res, next) {
-    res.render('bookSpace', { title: 'Book Space' });
+
+    let booking = new bookingModel();
+    booking.bookingID = parseInt(bookingModel.find().sort({bookingID:-1}).limit(1).bookingID+1);
+    booking.userID = parseInt(req.session.userID); //user id - automatically taken from the session
+    booking.spaceID = parseInt(req.body.spaceID);//space id
+    booking.date = req.body.date;//date
+    booking.timeFrom = req.body.timeFrom;//time from
+    booking.timeTo = (parseInt(req.body.timeFrom) + parseInt(req.body.hours)).toString;//time to
+
+    newUser.save(function(err, addedUser) {
+        if (err) {
+            console.log(err);
+            res.status(500).send();
+        } else {
+            //console.log('User added: ' + addedUser.name())
+            res.render('./dashboard', { status: "success"} )
+        }
+    });
 });
 
 router.get('/bookings', function(req, res, next) {
@@ -96,31 +113,6 @@ router.get('/getSpaces', function(req, res) {
     let spaces = [];
     let bookings = [];
     let filteredSpaces = [];
-    /*
-    mongo.connect(url, function(err, client) {
-        assert.equal(null, err);
-        var db = client.db('carParkDB'); // new variable version 3.0+ (connection loads client -> this stores the database)
-        const cursor = db.collection('Spaces').find(); //essentially an iterator
-        cursor.forEach(function(doc, err) { // doc is the variable we want -> document (like an SQL entry)
-            assert.equal(null, err); // check for an error
-            spaces.push(doc); //add the document to the spaces array
-        }, function() {
-            client.close();// must be here due to node.js being asynchronous // must close the client from mongo version 3.0+
-        });
-    });
-
-    mongo.connect(url, function(err, client) {
-        assert.equal(null, err);
-        var db = client.db('carParkDB'); // new variable version 3.0+ (connection loads client -> this stores the database)
-        const cursor = db.collection('Bookings').find(); //essentially an iterator
-        cursor.forEach(function(doc, err) { // doc is the variable we want -> document (like an SQL entry)
-            assert.equal(null, err); // check for an error
-            bookings.push(doc); //add the document to the bookings array array
-        }, function() {
-            client.close();// must be here due to node.js being asynchronous // must close the client from mongo version 3.0+
-            res.render('bookSpace', { spaces: filterSpaces(spaces, bookings) });
-        });
-    });*/
 
     let date;
     let todaysDate = new Date();
@@ -155,9 +147,6 @@ router.get('/getSpaces', function(req, res) {
         console.log(filteredSpaces);
         res.render('bookSpace', { spaces: filterSpaces(spaces, bookings) }); //may need some sequential support
     });
-
-
-
 });
 
 
@@ -176,7 +165,7 @@ router.post('/login', function(req, res) {
             res.render('index', { layout: false, status: "Not valid a valid user" } )
         }
         req.session.user = user;
-        res.render('dashboard')
+        res.render('dashboard',)
 
 
     });

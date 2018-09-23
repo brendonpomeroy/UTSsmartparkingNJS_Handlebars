@@ -15,14 +15,14 @@
 
     </div>
 
-    <form>
+    <form action="/bookSpace" method="post">
         <table>
             <tr>
             <td>
                 Space:
             </td>
                 <td>
-                    <select>
+                    <select name="spaceID">
                         {{# each spaces}}
                         <option>{{this.spaceID}}</option>
                         {{/each}}
@@ -34,20 +34,39 @@
                     Date:
                 </td>
                 <td>
-                    <select>
+                    <select name="date">
                         <option>
                             <script>document.write(todaysDate.getDate().toString() + "/" + (todaysDate.getMonth()+1).toString() + "/" + todaysDate.getFullYear().toString());</script>
                         </option>
                         <option>
-                            <script>document.write((todaysDate.getDate().toString()+1) + "/" + (todaysDate.getMonth()+1).toString() + "/" + todaysDate.getFullYear().toString());</script>
+                            <script>document.write((todaysDate.getDate()+1).toString() + "/" + (todaysDate.getMonth()+1).toString() + "/" + todaysDate.getFullYear().toString());</script>
                         </option>
                         <option>
-                            <script>document.write((todaysDate.getDate().toString()+2) + "/" + (todaysDate.getMonth()+1).toString() + "/" + todaysDate.getFullYear().toString());</script>
+                            <script>document.write((todaysDate.getDate()+2).toString() + "/" + (todaysDate.getMonth()+1).toString() + "/" + todaysDate.getFullYear().toString());</script>
                         </option>
                     </select>
                 </td>
             </tr>
+            <tr>
+                <td>Hours:</td>
+                <td>
+                    <select name="hours">
+                        <option>1</option>
+                        <option>2</option>
+                        <option>3</option>
+                        <option>4</option>
+                        <option>5</option>
+                        <option>6</option>
+                        <option>7</option>
+                        <option>8</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <input type="submit" class="buttons" value="Book">
+            </tr>
         </table>
+        <div id="status">{{ bookingStatus }}</div>
     </form>
 
 
