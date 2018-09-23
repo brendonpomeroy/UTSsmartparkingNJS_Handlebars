@@ -139,7 +139,7 @@ router.get('/getSpaces', function(req, res) {
         if(err) {
             console.log(err);
         } else {
-            console.log(bookingsDB[0]);
+            console.log(bookingsDB);
             bookings = bookingsDB;
         }
     });
@@ -148,9 +148,10 @@ router.get('/getSpaces', function(req, res) {
             console.log(err);
         } else {
            spaces = spaceDB;
+           console.log(spaces);
         }
+        res.render('bookSpace', { spaces: filterSpaces(spaces, bookings) }); //may need some sequential support
     });
-    res.render('bookSpace', { spaces: filterSpaces(spaces, bookings) }); //may need some sequential support
 
 
 
