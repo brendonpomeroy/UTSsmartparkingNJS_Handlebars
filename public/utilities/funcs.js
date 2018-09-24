@@ -7,6 +7,6 @@ function HideAndShowNav() {
     }
 }
 
-function highLightNav(index){
+function highLightNav(id){
   document.getElementById("myTopNav").getElementsByTagName('a')[id].classList.add('active');
 }

@@ -56,15 +56,15 @@ router.get('/pay', function(req, res) {
 });
 
 router.get('/dashboard', function(req, res, next) {
-    res.render('dashboard');
+    res.render('dashboard', {ind: 0});
 });
 
 router.get('/bookSpace', function(req, res, next) {
-    res.render('bookSpace', { title: 'Book Space', ind: 0});
+    res.render('bookSpace', { title: 'Book Space', ind: 1});
 });
 
 router.get('/bookings', function(req, res, next) {
-    res.render('bookings', { title: 'Bookings', ind: 1});
+    res.render('bookings', { title: 'Bookings', ind: 2});
 });
 
 router.get('/account', function(req, res, next) {
@@ -72,7 +72,7 @@ router.get('/account', function(req, res, next) {
         res.render('index');
     }
 
-    res.render('account', { user: req.session.user, ind: 3});
+    res.render('account', { user: req.session.user, ind: 4});
 });
 
 router.get('/manageUsers', function(req, res) {
@@ -82,7 +82,7 @@ router.get('/manageUsers', function(req, res) {
         if(err) {
             console.log(err);
         } else {
-            res.render('manageUsers', { users: userDB, ind: 2} )
+            res.render('manageUsers', { users: userDB, ind: 3} )
         }
     });
 });
