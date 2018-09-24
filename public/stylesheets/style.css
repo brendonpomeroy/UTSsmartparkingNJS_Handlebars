@@ -16,41 +16,45 @@ a {
 /** ================ **/
 /** Navigation class **/
 .nav{
-  list-style:none;
+  overflow: hidden;
+  background-color: black;
+  /*list-style:none;
   margin:0;
   padding:0;
   text-align:center;
   color: white;
-  background-color: black;
-  height: 68px;
-  overflow: hidden;
-}
-
-ul {
-  list-style-type: none;
-  margin: 0;
-  padding: 0;
-}
-
-li {
-  display: inline;
-  height:68px;
-
-}
-
-li a:hover {
-  background-color: #DDD;
-  color: black;
+  height: 68px;*/
 }
 
 .nav a{
-  display:inline-block;
+  float:left;
+  display:block;
   padding:25px 40px;
   color:white;
   text-decoration: none;
   text-align: center;
   font-size: 17px;
 }
+
+.nav a:hover {
+  background-color: #DDD;
+  color: black;
+}
+
+/*ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+li {
+  float:left;
+}
+
+li a:hover {
+  background-color: #DDD;
+  color: black;
+}*/
 
 .nav .icon{
   display: none;
@@ -61,15 +65,15 @@ li a:hover {
   color: white;
 }
 
-@media screen and (max-width: 600px) {
-  .nav a:not(:first-child) {display: none;}
+@media screen and (max-width: 800px) {
+  .nav a: {display: none;}
   .nav a.icon {
     float: right;
     display: block;
   }
 }
 
-@media screen and (max-width: 600px) {
+@media screen and (max-width: 800px) {
   .nav.responsive {position: relative;}
   .nav.responsive .icon {
     position: absolute;

@@ -60,11 +60,11 @@ router.get('/dashboard', function(req, res, next) {
 });
 
 router.get('/bookSpace', function(req, res, next) {
-    res.render('bookSpace', { title: 'Book Space' });
+    res.render('bookSpace', { title: 'Book Space', ind: 0});
 });
 
 router.get('/bookings', function(req, res, next) {
-    res.render('bookings', { title: 'Bookings' });
+    res.render('bookings', { title: 'Bookings', ind: 1});
 });
 
 router.get('/account', function(req, res, next) {
@@ -72,7 +72,7 @@ router.get('/account', function(req, res, next) {
         res.render('index');
     }
 
-    res.render('account', { user: req.session.user });
+    res.render('account', { user: req.session.user, ind: 3});
 });
 
 router.get('/manageUsers', function(req, res) {
@@ -82,7 +82,7 @@ router.get('/manageUsers', function(req, res) {
         if(err) {
             console.log(err);
         } else {
-            res.render('manageUsers', { users: userDB } )
+            res.render('manageUsers', { users: userDB, ind: 2} )
         }
     });
 });
