@@ -15,8 +15,15 @@
         <p>
         Please select the desired payment outcome:
 
-        <a href="#">Payment Failed</a><br>
-        <a href="#">Payment Succeeded</a>
+        <form action="/pay" method="post">
+            <input type="hidden" name="paymentStatus" value="success">
+            <input type="hidden" name="bookingID" value="{{bookingID}}">
+            <input type="submit" class="buttons" value="Payment succeeded">
+        </form>
+        <form action="/pay" method="post">
+            <input type="hidden" name="paymentStatus" value="fail">
+            <input type="submit" class="buttons" value="Payment failed">
+        </form>
         </p>
     </div>
 

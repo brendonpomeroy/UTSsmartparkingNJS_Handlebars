@@ -1,5 +1,7 @@
 <h1>{{title}}</h1>
-<script>todaysDate = new Date();</script>
+<script>
+    todaysDate = new Date();
+</script>
 <div id="bookWrapper">
     <h1>Make a Booking</h1>
     <div id="searchController">
@@ -14,6 +16,8 @@
         </form>
 
     </div>
+
+
 
     <form action="/bookSpace" method="post">
         <table>
@@ -48,6 +52,29 @@
                 </td>
             </tr>
             <tr>
+                <td>Time From:</td>
+                <td>
+                    <select name="timeFrom">
+                        <option>7:00</option>
+                        <option>8:00</option>
+                        <option>9:00</option>
+                        <option>10:00</option>
+                        <option>11:00</option>
+                        <option>12:00</option>
+                        <option>13:00</option>
+                        <option>14:00</option>
+                        <option>15:00</option>
+                        <option>16:00</option>
+                        <option>17:00</option>
+                        <option>18:00</option>
+                        <option>19:00</option>
+                        <option>20:00</option>
+                        <option>21:00</option>
+                        <option>22:00</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
                 <td>Hours:</td>
                 <td>
                     <select name="hours">
@@ -63,7 +90,9 @@
                 </td>
             </tr>
             <tr>
-                <input type="submit" class="buttons" value="Book">
+                <td>
+                    <input type="submit" class="buttons" value="Book">
+                </td>
             </tr>
         </table>
         <div id="status">{{ bookingStatus }}</div>
@@ -127,19 +156,27 @@
 
 
         </tr>
-        {{# each spaces }}
+        {{#spaces }}
             <tr>
-                <td>{{ this.spaceID }} </td>
-                <td>{{this.spaceType }} </td>
+                <td>{{ spaceID }} </td>
+                <td>{{ spaceType }} </td>
+            {{#bookings}}
+                <td>
+                    {{#if this}}
+                        <div class="available"><button onclick="">hhh</button></div>
+                    {{else}}
+                        <div class="unavailable"></div>
+                    {{/if}}
+                </td>
+            {{/bookings}}
             </tr>
-        {{/each }}
+        {{/spaces }}
 
     </table>
     </div>
 </div>
 
 <script>
-
     var thirdDay = new Date();
 
     thirdDay.setDate(thirdDay.getDate() + 2);
@@ -167,7 +204,7 @@
         document.getElementById(currDay).style.color = "#0f4beb";
     }
 
-    function bookIn(space, hour, count) {
+    function bookIn(space, hour) {
 
         document.getElementById("bookSelection").style.display = "block";
 

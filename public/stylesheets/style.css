@@ -85,6 +85,21 @@ li a:hover {
   height: 60px;
 }
 
+.smallButton {
+  background-color: #0f4beb;
+  border: none;
+  color: white;
+  padding: 5px 5px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+  width: 70px;
+  height: 30px;
+}
+
 table {
   border-collapse: collapse;
   width: 100%;
@@ -118,6 +133,16 @@ th, td {
   background-color: aquamarine;
 }
 
+.available {
+  background-color: green;
+  width: 25px;
+}
+
+.unavailable {
+  background-color: lightgrey;
+  width: 25px;
+}
+
 /*
 .footer {
   background-color: black;
@@ -130,3 +155,11 @@ th, td {
   left: 0;
 }
 */
+
+
+
+
+
+
+
+

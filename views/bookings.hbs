@@ -1,2 +1,47 @@
-<h1>{{title}}</h1>
-<p>Welcome to {{title}}</p>
+<h1></h1>
+<p>Welcome to <script>document.write(({{ receipt._id }}).toString())</script></p>
+
+<section class="bookings">
+    <h2>Bookings</h2>
+    {{ status }}
+
+    <table>
+        <tr>
+            <th>Booking ID</th>
+            <th>Space</th>
+            <th>Date</th>
+            <th>From</th>
+            <th>To</th>
+        </tr>
+        {{# each bookings }}
+            <tr>
+                <td> {{ this.bookingID }} </td>
+                <td> {{ this.spaceID }} </td>
+                <td> {{ this.date }} </td>
+                <td> {{ this.timeFrom }} </td>
+                <td> {{ this.timeTo }}</td>
+                <td>
+                    {{#if this.isPast }}
+                        Cannot cancel
+                    {{else}}
+                        <form action="/cancelBooking" method="post"><input type="hidden" name="bookingID" value="{{this.bookingID}}">
+                            <input type="submit" value="cancel" class="smallButton">
+                        </form>
+                    {{/if}}
+                </td>
+                <td>
+                    {{#if this.isPaid}}
+                        <form action="/showReceipt" method="post"><input type="hidden" name="receiptID" value="{{this.receipt}}">
+                            <input type="submit" value="Receipt" class="smallButton">
+                        </form>
+                    {{else}}
+                    <form action="/payPortal" method="post"><input type="hidden" name="bookingID" value="{{this.bookingID}}">
+                        <input type="submit" value="Pay" class="smallButton">
+                    </form>
+                    {{/if}}
+                </td>
+            </tr>
+        {{/each }}
+    </table>
+    </div>
+</section>

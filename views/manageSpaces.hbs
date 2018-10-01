@@ -1,0 +1,56 @@
+
+
+<section>
+    <h2>Edit Space</h2>
+    <form action="/updateSpace" method="post">
+        <table>
+            <tr>
+                <td>
+                    Space Number:
+                </td>
+                <td>
+                    <input type="text">
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Location ID:
+                </td>
+                <td>
+                    <input type="text">
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Space Type:
+                </td>
+                <td>
+                    <input type="text">
+                </td>
+            </tr>
+        </table>
+        <input type="submit" class="buttons">
+    </form>
+</section>
+
+<section class="bookings">
+    <h2>Spaces</h2>
+    {{ status }}
+
+    <table>
+        <tr>
+            <th>Space ID</th>
+            <th>Location ID</th>
+            <th>Space Type</th>
+
+        </tr>
+        {{# each spaces }}
+            <tr>
+                <td> {{ this.spaceID }} </td>
+                <td> {{ this.locationID }} </td>
+                <td> {{ this.spaceType }} </td>
+            </tr>
+        {{/each }}
+    </table>
+    </div>
+</section>
