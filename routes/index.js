@@ -105,14 +105,6 @@ router.get('/dashboard', function(req, res, next) {
     res.render('dashboard', {ind: 0});
 });
 
-<<<<<<< HEAD
-router.get('/bookSpace', function(req, res, next) {
-    res.render('bookSpace', { title: 'Book Space', ind: 1});
-});
-
-router.get('/bookings', function(req, res, next) {
-    res.render('bookings', { title: 'Bookings', ind: 2});
-=======
 router.get('/manageSpaces', function(req, res) {
     if (req.session.user.userType == "Admin") {
         spaceModel.find({}, function (err, spacesDB) {
@@ -176,7 +168,6 @@ router.get('/bookings', function(req, res, next) {
 router.post('/cancelBooking', function(req, res) {
     //check if timeFrom has passed
     //update the database
->>>>>>> bdada186b8487f53004b6de34b2a9ee5ba5a86dd
 });
 
 router.get('/account', function(req, res, next) {
