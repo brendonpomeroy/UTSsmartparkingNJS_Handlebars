@@ -4,15 +4,50 @@
 <section>
     <h2>Add User</h2>
 <form action="/addUser" method="post">
-    UserID <input type="text" id="userID" name="userID">
-    Name<input type="text" id="name" name="name">
-    Phone<input type="text" id="phone" name="phone">
-    Email<input type="text" id="email" name="email">
-    User Type<input type="text" id="usertype" name="usertype">
-    Password<input type="text" id="password" name="password">
-    <button type="submit">INSERT</button>
+    <table>
+        <tr>
+            <td>UserID</td>
+            <td><input type="text" id="userID" name="userID"></td></tr>
+        <tr>
+            <td>Name</td>
+            <td><input type="text" id="name" name="name"></td>
+        </tr>
+        <tr>
+            <td>Phone</td>
+            <td><input type="text" id="phone" name="phone"></td>
+        </tr>
+        <tr>
+            <td>Email</td>
+            <td><input type="text" id="email" name="email"></td>
+        </tr>
+        <tr>
+            <td>User Type</td>
+            <td>
+                <select is="usertype" name="usertype">
+                    <option>User</option>
+                    <option>Admin</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td>Password</td>
+            <td><input type="text" id="password" name="password"></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td><button type="submit" class="smallButton">INSERT</button></td>
+        </tr>
+    </table>
 </form>
     {{ status }}
+</section>
+
+<section>
+    <h2>Delete User</h2>
+    <form action="/deleteUser" method="post">
+        User ID: <input type="text" id="userID" name="userID">
+        <button type="submit" class="smallButton">DELETE</button>
+    </form>
 </section>
 
 <section class="users">

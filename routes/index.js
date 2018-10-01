@@ -257,12 +257,25 @@ router.post('/login', function(req, res) {
     });
 });
 
-router.post('/updateUser', function(req, res, next) {
+router.post('/updateUser', function(req, res) {
 
 });
 
-router.post('/deleteUser', function(req, res, next) {
-
+router.post('/deleteUser', function(req, res) {
+    if (req.session.user.userType == "Admin") {
+        console.log(req.body.userID);
+        userModel.deleteOne({ userID: parseInt(req.body.userID) }, function(err) {
+            if (err) {
+                console.log(err);
+                console.log("failed to remove user");
+                return res.redirect('manageUsers');
+            }
+            console.log("successfully removed user");
+            return res.redirect('manageUsers');
+        });
+    } else {
+        res.status(404).send();
+    }
 });
 
 //Add a new user to the data base
