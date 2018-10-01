@@ -191,9 +191,9 @@ router.post('/updateUser', function(req, res, next) {
 });
 
 router.delete('/deleteUser', function(req, res, next) {
-    // router.delete('/deleteUserByAdmin/:userID',function(req,res) {
-        userID = req.body.userID;
-        userModel.findOneAndRemove({userID: userID}, function (err) {
+        let user = req.body.userID;
+
+        userModel.findOneAndRemove({userID: user}, function (err) {
             if (err) {
                 console.log(err);
                 return res.status(500).send();
