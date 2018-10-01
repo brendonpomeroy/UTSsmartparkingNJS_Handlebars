@@ -1,5 +1,7 @@
 <h1>{{title}}</h1>
-<script>todaysDate = new Date();</script>
+<script>
+    todaysDate = new Date();
+</script>
 <div id="bookWrapper">
     <h1>Make a Booking</h1>
     <div id="searchController">
@@ -24,14 +26,16 @@
       </table>
     </div>
 
-    <form>
+
+
+    <form action="/bookSpace" method="post">
         <table>
             <tr>
             <td>
                 Space:
             </td>
                 <td>
-                    <select>
+                    <select name="spaceID">
                         {{# each spaces}}
                         <option>{{this.spaceID}}</option>
                         {{/each}}
@@ -43,7 +47,7 @@
                     Date:
                 </td>
                 <td>
-                    <select>
+                    <select name="date">
                         <option>
                             <script>document.write(todaysDate.getDate().toString() + "/" + (todaysDate.getMonth()+1).toString() + "/" + todaysDate.getFullYear().toString());</script>
                         </option>
@@ -56,7 +60,51 @@
                     </select>
                 </td>
             </tr>
+            <tr>
+                <td>Time From:</td>
+                <td>
+                    <select name="timeFrom">
+                        <option>7:00</option>
+                        <option>8:00</option>
+                        <option>9:00</option>
+                        <option>10:00</option>
+                        <option>11:00</option>
+                        <option>12:00</option>
+                        <option>13:00</option>
+                        <option>14:00</option>
+                        <option>15:00</option>
+                        <option>16:00</option>
+                        <option>17:00</option>
+                        <option>18:00</option>
+                        <option>19:00</option>
+                        <option>20:00</option>
+                        <option>21:00</option>
+                        <option>22:00</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>Hours:</td>
+                <td>
+                    <select name="hours">
+                        <option>1</option>
+                        <option>2</option>
+                        <option>3</option>
+                        <option>4</option>
+                        <option>5</option>
+                        <option>6</option>
+                        <option>7</option>
+                        <option>8</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <input type="submit" class="buttons" value="Book">
+                </td>
+            </tr>
         </table>
+        <div id="status">{{ bookingStatus }}</div>
     </form>
 
 
@@ -117,8 +165,9 @@
 
 
         </tr>
-        {{# each spaces }}
+        {{#spaces }}
             <tr>
+<<<<<<< HEAD
                 <td>{{ this.spaceID }} </td>
                 <td>{{this.spaceType }} </td>
                 <td><button type="" class="availableButton"> </button></td>
@@ -137,15 +186,27 @@
                 <td><button type="" class="availableButton"> </button></td>
                 <td><button type="" class="availableButton"> </button></td>
                 <td><button type="" class="availableButton"> </button></td>
+=======
+                <td>{{ spaceID }} </td>
+                <td>{{ spaceType }} </td>
+            {{#bookings}}
+                <td>
+                    {{#if this}}
+                        <div class="available"><button onclick="">hhh</button></div>
+                    {{else}}
+                        <div class="unavailable"></div>
+                    {{/if}}
+                </td>
+            {{/bookings}}
+>>>>>>> bdada186b8487f53004b6de34b2a9ee5ba5a86dd
             </tr>
-        {{/each }}
+        {{/spaces }}
 
     </table>
     </div>
 </div>
 
 <script>
-
     var thirdDay = new Date();
 
     thirdDay.setDate(thirdDay.getDate() + 2);
@@ -173,7 +234,7 @@
         document.getElementById(currDay).style.color = "#0f4beb";
     }
 
-    function bookIn(space, hour, count) {
+    function bookIn(space, hour) {
 
         document.getElementById("bookSelection").style.display = "block";
 

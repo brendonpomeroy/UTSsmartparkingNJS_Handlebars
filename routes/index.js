@@ -7,7 +7,7 @@ mongoose.connect("mongodb+srv://System:utssmartparking@parkdb-fez7r.mongodb.net/
 
 //schemas define what data and how the data will exist in the database. These are strict and can only be defined once.
 var bookingSchema = new Schema({
-    bookingID: Number,
+    //bookingID: Number,
     userID: Number,
     spaceID: Number,
     date: String,
@@ -31,9 +31,8 @@ var spaceSchema = new Schema({
 });
 
 var receiptSchema = new Schema({
-    receiptID: Number,
-    bookingID: Number,
-    date: Date
+    bookingID: Schema.Types.ObjectId,
+    date: String
 });
 
 //Models what we use to access the data in the database.
@@ -42,29 +41,142 @@ var bookingModel = mongoose.model('Bookings', bookingSchema);
 var spaceModel = mongoose.model('Spaces', spaceSchema);
 var receiptModel = mongoose.model('Receipts', receiptSchema);
 
-//var mongo = require('mongodb').MongoClient;
-//var assert = require('assert');
-//var url = "mongodb+srv://System:utssmartparking@parkdb-fez7r.mongodb.net/";
-
 /* GET home page. */
 router.get('/', function(req, res, next) {
   res.render('index', { layout: false });
 });
 
-router.get('/pay', function(req, res) {
-    res.render('pay', { layout: false });
+router.post('/payPortal', function(req, res) {
+    res.render('pay', { layout: false, bookingID: req.body.bookingID });
 });
+
+router.post('/pay', function(req, res) {
+    //check if thepayment was successful
+    if (req.body.paymentStatus == "fail") {
+        res.render('bookings', { status: "Payment Failed"} )
+    } else {
+        //set the date and time for the database
+        let todaysDate = new Date();
+        let date = todaysDate.getDate().toString() + "/" + (todaysDate.getMonth() + 1).toString() + "/" + todaysDate.getFullYear().toString() + " " + (todaysDate.getHours() + 1).toString() + ":" + (todaysDate.getMinutes() + 1).toString();
+
+        //create the receipt
+        let receipt = new receiptModel(); //must create a new instance of the model when creating a user.
+        receipt.bookingID = req.body.bookingID;
+        receipt.date = date;
+
+        //add the receipt to the database
+        receipt.save(function (err, addedReceipt) {
+            if (err) {
+                console.log(err);
+                res.render('bookings', { status: "Cannot Process Receipt at this time"})
+            } else {
+                console.log(addedReceipt);
+                res.render('bookings', { status: "Payment Successful" , receipt: addedReceipt})
+            }
+        });
+    }
+});
+
+router.post('/showReceipt',function(req,res) {
+    console.log(req.body.receiptID);
+    receiptModel.findOne({ _id: req.body.receiptID }, function (err, receipt) {
+        if (err) {
+            res.render('receipt', { status: "receipt not found"});
+            console.log(err);
+        } else {
+            console.log(receipt);
+            //res.render('receipt', { receipt: receipt });
+            bookingModel.findOne({ _id: receipt.bookingID }, function (err, booking) {
+                if (err) {
+                    console.log(err);
+                } else {
+                    res.render('receipt', { receipt: receipt, booking: booking });
+                }
+            });
+
+        }
+    });
+
+    //res.render('receipt', { receipt: receipt });
+});
+
 
 router.get('/dashboard', function(req, res, next) {
     res.render('dashboard', {ind: 0});
 });
 
+<<<<<<< HEAD
 router.get('/bookSpace', function(req, res, next) {
     res.render('bookSpace', { title: 'Book Space', ind: 1});
 });
 
 router.get('/bookings', function(req, res, next) {
     res.render('bookings', { title: 'Bookings', ind: 2});
+=======
+router.get('/manageSpaces', function(req, res) {
+    if (req.session.user.userType == "Admin") {
+        spaceModel.find({}, function (err, spacesDB) {
+            if (err) {
+                console.log(err);
+            } else {
+                res.render('manageSpaces', {spaces: spacesDB});
+            }
+        });
+    } else {
+        res.status(404).send();
+    }
+});
+
+router.post('/updateSpace', function(req, res) {
+    //update the database
+});
+
+router.post('/bookSpace', function(req, res, next) {
+    //function()
+    let booking = new bookingModel();
+    //booking.bookingID = getID();
+    booking.userID = req.session.user.userID; //user id - automatically taken from the session
+    booking.spaceID = parseInt(req.body.spaceID);//space id
+    booking.date = req.body.date;//date
+    booking.timeFrom = parseInt(req.body.timeFrom);//time from
+    booking.timeTo = parseInt(req.body.timeFrom) + parseInt(req.body.hours);//time to
+    console.log(booking);
+    booking.save(function(err, confirmedBooking) {
+        if (err) {
+            console.log(err);
+        } else {
+            console.log('Booking: ' + confirmedBooking);
+            res.render('bookings', { status: "success"} );
+        }
+    });
+});
+
+router.get('/bookings', function(req, res, next) {
+    let bookings;
+    bookingModel.find({ userID: req.session.user.userID }, function(err, userBookings) {
+        if(err) {
+            console.log(err);
+        } else {
+                //res.render('bookings', { bookings: userBookings } );
+            //bookings = userBookings;
+            receiptModel.find({}, function(err, receipts) {
+                if(err) {
+                    console.log(err);
+                } else {
+                    res.render('bookings', { bookings: filterBookings(userBookings, receipts) });
+                }
+            });
+        }
+    });
+
+
+
+});
+
+router.post('/cancelBooking', function(req, res) {
+    //check if timeFrom has passed
+    //update the database
+>>>>>>> bdada186b8487f53004b6de34b2a9ee5ba5a86dd
 });
 
 router.get('/account', function(req, res, next) {
@@ -76,8 +188,6 @@ router.get('/account', function(req, res, next) {
 });
 
 router.get('/manageUsers', function(req, res) {
-    let users = [];
-
     userModel.find({}, function(err, userDB) {
         if(err) {
             console.log(err);
@@ -96,31 +206,6 @@ router.get('/getSpaces', function(req, res) {
     let spaces = [];
     let bookings = [];
     let filteredSpaces = [];
-    /*
-    mongo.connect(url, function(err, client) {
-        assert.equal(null, err);
-        var db = client.db('carParkDB'); // new variable version 3.0+ (connection loads client -> this stores the database)
-        const cursor = db.collection('Spaces').find(); //essentially an iterator
-        cursor.forEach(function(doc, err) { // doc is the variable we want -> document (like an SQL entry)
-            assert.equal(null, err); // check for an error
-            spaces.push(doc); //add the document to the spaces array
-        }, function() {
-            client.close();// must be here due to node.js being asynchronous // must close the client from mongo version 3.0+
-        });
-    });
-
-    mongo.connect(url, function(err, client) {
-        assert.equal(null, err);
-        var db = client.db('carParkDB'); // new variable version 3.0+ (connection loads client -> this stores the database)
-        const cursor = db.collection('Bookings').find(); //essentially an iterator
-        cursor.forEach(function(doc, err) { // doc is the variable we want -> document (like an SQL entry)
-            assert.equal(null, err); // check for an error
-            bookings.push(doc); //add the document to the bookings array array
-        }, function() {
-            client.close();// must be here due to node.js being asynchronous // must close the client from mongo version 3.0+
-            res.render('bookSpace', { spaces: filterSpaces(spaces, bookings) });
-        });
-    });*/
 
     let date;
     let todaysDate = new Date();
@@ -140,7 +225,6 @@ router.get('/getSpaces', function(req, res) {
         if(err) {
             console.log(err);
         } else {
-            console.log(bookingsDB);
             bookings = bookingsDB;
         }
     });
@@ -149,15 +233,11 @@ router.get('/getSpaces', function(req, res) {
             console.log(err);
         } else {
            spaces = spaceDB;
-           console.log(spaces);
         }
         filteredSpaces = filterSpaces(spaces, bookings);
         console.log(filteredSpaces);
         res.render('bookSpace', { spaces: filterSpaces(spaces, bookings) }); //may need some sequential support
     });
-
-
-
 });
 
 
@@ -176,7 +256,7 @@ router.post('/login', function(req, res) {
             res.render('index', { layout: false, status: "Not valid a valid user" } )
         }
         req.session.user = user;
-        res.render('dashboard')
+        res.render('dashboard',)
 
 
     });
@@ -220,7 +300,7 @@ router.post('/addUser', function(req, res, next) {
             res.status(500).send();
         } else {
             //console.log('User added: ' + addedUser.name())
-            res.render('./dashboard', { status: "success"} )
+            res.render('manageUsers', { status: "successfully added user"} )
         }
     });
 });
@@ -257,6 +337,42 @@ function filterSpaces(spaces, bookings) {
 
     });
     return newSpaces;
+}
+
+function filterBookings(bookings, receipts) {
+    let newBookings = [];
+    bookings.forEach(function(booking) {
+        let isPaid = false;
+        let isPast = true;
+        let receiptID = null;
+        receipts.forEach(function(receipt) {
+            if ((receipt.bookingID).toString() == (booking._id).toString()){
+                isPaid = true;
+                receiptID = receipt._id;
+            }
+        });
+
+        let date = new Date();
+        let bookingDate = (booking.date).split("/");
+        if (bookingDate[1] > date.getMonth()+1) {
+            isPast = false;
+        } else if (bookingDate[1] == date.getMonth()+1 && bookingDate[0] > date.getDate()) {
+            isPast = false;
+        }
+        let newBooking = {
+            bookingID: booking._id,
+            spaceID: booking.spaceID,
+            date: booking.date,
+            timeFrom: booking.timeFrom,
+            timeTo: booking.timeTo,
+            isPaid: isPaid,
+            receipt: receiptID,
+            isPast: isPast
+        };
+        newBookings.push(newBooking);
+
+    });
+    return newBookings;
 }
 
 module.exports = router;
