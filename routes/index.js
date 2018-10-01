@@ -183,11 +183,24 @@ router.post('/login', function(req, res) {
 });
 
 router.post('/updateUser', function(req, res, next) {
-
+    if (req.session.user.userType == "Admin") {
+        //delete the user
+    } else {
+        res.status(404).send();
+    }
 });
 
 router.post('/deleteUser', function(req, res, next) {
-
+    // router.delete('/deleteUserByAdmin/:userID',function(req,res) {
+        userID = req.body.userID;
+        userModel.findOneAndRemove({userID: userID}, function (err) {
+            if (err) {
+                console.log(err);
+                return res.status(500).send();
+            }
+            res.redirect(`manageUsers`, {status: "Successfully deleted user."})
+            //return res.status(200).send();
+        });
 });
 
 //Add a new user to the data base
@@ -211,6 +224,7 @@ router.post('/addUser', function(req, res, next) {
         }
     });
 });
+
 
 
 //this function removes personal booking data from the list that will be sent to the client browser.
