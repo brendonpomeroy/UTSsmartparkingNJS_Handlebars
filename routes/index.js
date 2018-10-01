@@ -102,9 +102,13 @@ router.post('/showReceipt',function(req,res) {
 
 
 router.get('/dashboard', function(req, res, next) {
-    res.render('dashboard');
+    res.render('dashboard', {ind: 0});
 });
 
+router.get('/bookSpace', function(req, res, next) {
+    res.render('bookSpace', {title: 'Book Space', ind: 1});
+
+});
 router.get('/manageSpaces', function(req, res) {
     if (req.session.user.userType == "Admin") {
         spaceModel.find({}, function (err, spacesDB) {
@@ -155,7 +159,7 @@ router.get('/bookings', function(req, res, next) {
                 if(err) {
                     console.log(err);
                 } else {
-                    res.render('bookings', { bookings: filterBookings(userBookings, receipts) });
+                    res.render('bookings', { bookings: filterBookings(userBookings, receipts), ind: 2 });
                 }
             });
         }
@@ -175,7 +179,7 @@ router.get('/account', function(req, res, next) {
         res.render('index');
     }
 
-    res.render('account', { user: req.session.user });
+    res.render('account', { user: req.session.user, ind: 4});
 });
 
 router.get('/manageUsers', function(req, res) {
@@ -183,7 +187,7 @@ router.get('/manageUsers', function(req, res) {
         if(err) {
             console.log(err);
         } else {
-            res.render('manageUsers', { users: userDB } )
+            res.render('manageUsers', { users: userDB, ind: 3} )
         }
     });
 });
@@ -247,7 +251,7 @@ router.post('/login', function(req, res) {
             res.render('index', { layout: false, status: "Not valid a valid user" } )
         }
         req.session.user = user;
-        res.render('dashboard',)
+        res.render('dashboard')
 
 
     });

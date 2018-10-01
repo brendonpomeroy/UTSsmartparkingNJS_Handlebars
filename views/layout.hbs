@@ -3,19 +3,24 @@
   <head>
     <title>{{title}}</title>
     <link rel='stylesheet' href='/stylesheets/style.css' />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script type="text/javascript" src="utilities/funcs.js"></script>
   </head>
-  <body>
+  <body onload="highLightNav({{ind}})">
   <div class="header">
       <a href="index"><img src="images/UTSlogo.png" alt="UTS logo" height="100"></a>
   </div>
-    <div class="nav">
-          <ul>
-              <li><a href="getSpaces">Book Space</a></li>
-              <li><a href="bookings">Bookings</a></li>
-              <li><a href="manageUsers">Manage Users</a></li>
-              <li><a href="manageSpaces">Manage Spaces</a></li>
-              <li><a href="account">Account</a></li>
-          </ul>
+    <div class="nav" id="myTopNav">
+        <a href="dashboard">Home</a>
+        <a href="getSpaces">Book Space</a>
+        <a href="bookings">Bookings</a>
+        <a href="manageUsers">Manage Users</a>
+        <a href="manageSpaces">Manage Spaces</a>
+        <a href="account">Account</a>
+        <a href="javascript:void(0);" class="icon" onclick="HideAndShowNav()">
+            <i class="fa fa-bars"></i>
+            </a>
     </div>
     {{{body}}}
 
