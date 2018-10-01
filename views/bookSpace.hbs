@@ -165,21 +165,21 @@
 
 
         </tr>
-        {{#spaces }}
+        {{#spaces}}
             <tr>
                 <td>{{ spaceID }} </td>
                 <td>{{ spaceType }} </td>
             {{#bookings}}
                 <td>
                     {{#if this}}
-                        <div class="available"><button onclick="">hhh</button></div>
+                        <button class="available" onclick=""> </button>
                     {{else}}
-                        <div class="unavailable"></div>
+                        <div class="unavailable"> </div>
                     {{/if}}
                 </td>
             {{/bookings}}
             </tr>
-        {{/spaces }}
+        {{/spaces}}
 
     </table>
     </div>

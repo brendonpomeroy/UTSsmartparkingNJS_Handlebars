@@ -307,14 +307,12 @@ function filterSpaces(spaces, bookings) {
     let newSpaces = [];
     spaces.forEach(function(space) {
         let timeSlots = [];
+        for(var i = 0; i <= 15; i++) { timeSlots.push(true); }
         bookings.forEach(function(booking) {
             if (booking.spaceID == space.spaceID){
-                for(var i = 7; i <= 22; i++) {
-                    if (i >= booking.timeFrom && i <= booking.timeTo ) {
-                        timeSlots.push(false);
-                    }
-                    else {
-                        timeSlots.push(true);
+                for(var i = 0; i <= 15; i++) {
+                    if (i >= booking.timeFrom-7 && i <= booking.timeTo-7 ) {
+                        timeSlots[i] = false;
                     }
                 }
             }

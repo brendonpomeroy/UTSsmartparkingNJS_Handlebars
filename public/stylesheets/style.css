@@ -167,12 +167,14 @@ th, td {
 
 .available {
   background-color: green;
-  width: 25px;
+  width: 100%;
+  height: 100%;
 }
 
 .unavailable {
   background-color: lightgrey;
-  width: 25px;
+  width: 100%;
+  height: 100%;
 }
 
 /*
