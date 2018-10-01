@@ -190,7 +190,7 @@ router.post('/updateUser', function(req, res, next) {
     }
 });
 
-router.post('/deleteUser', function(req, res, next) {
+router.delete('/deleteUser', function(req, res, next) {
     // router.delete('/deleteUserByAdmin/:userID',function(req,res) {
         userID = req.body.userID;
         userModel.findOneAndRemove({userID: userID}, function (err) {
