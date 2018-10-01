@@ -3,16 +3,25 @@
 <div id="bookWrapper">
     <h1>Make a Booking</h1>
     <div id="searchController">
-        <form method="get" action="/getSpaces">
-            <input type="submit" name="day" id="day" class="buttons" value="Today">
-        </form>
-        <form method="get" action="/getSpaces">
-            <input type="submit" name="day" id="day" class="buttons" value="Tomorrow">
-        </form>
-        <form method="get" action="/getSpaces">
-            <input type="submit" name="day" id="thirdDayButton" class="buttons" value="">
-        </form>
-
+      <table>
+        <tr>
+        <td>
+          <form method="get" action="/getSpaces">
+              <input type="submit" name="day" id="day" class="buttons" value="Today">
+          </form>
+        </td>
+        <td>
+          <form method="get" action="/getSpaces">
+              <input type="submit" name="day" id="day" class="buttons" value="Tomorrow">
+          </form>
+        </td>
+        <td>
+          <form method="get" action="/getSpaces">
+              <input type="submit" name="day" id="thirdDayButton" class="buttons" value="">
+          </form>
+        </td>
+        </tr>
+      </table>
     </div>
 
     <form>
@@ -39,10 +48,10 @@
                             <script>document.write(todaysDate.getDate().toString() + "/" + (todaysDate.getMonth()+1).toString() + "/" + todaysDate.getFullYear().toString());</script>
                         </option>
                         <option>
-                            <script>document.write((todaysDate.getDate().toString()+1) + "/" + (todaysDate.getMonth()+1).toString() + "/" + todaysDate.getFullYear().toString());</script>
+                            <script>document.write((todaysDate.getDate()+1).toString() + "/" + (todaysDate.getMonth()+1).toString() + "/" + todaysDate.getFullYear().toString());</script>
                         </option>
                         <option>
-                            <script>document.write((todaysDate.getDate().toString()+2) + "/" + (todaysDate.getMonth()+1).toString() + "/" + todaysDate.getFullYear().toString());</script>
+                            <script>document.write((todaysDate.getDate()+2).toString() + "/" + (todaysDate.getMonth()+1).toString() + "/" + todaysDate.getFullYear().toString());</script>
                         </option>
                     </select>
                 </td>
@@ -112,6 +121,22 @@
             <tr>
                 <td>{{ this.spaceID }} </td>
                 <td>{{this.spaceType }} </td>
+                <td><button type="" class="availableButton"> </button></td>
+                <td><button type="" class="availableButton"> </button></td>
+                <td><button type="" class="availableButton"> </button></td>
+                <td><button type="" class="availableButton"> </button></td>
+                <td><button type="" class="availableButton"> </button></td>
+                <td><button type="" class="availableButton"> </button></td>
+                <td><button type="" class="availableButton"> </button></td>
+                <td><button type="" class="availableButton"> </button></td>
+                <td><button type="" class="availableButton"> </button></td>
+                <td><button type="" class="availableButton"> </button></td>
+                <td><button type="" class="availableButton"> </button></td>
+                <td><button type="" class="availableButton"> </button></td>
+                <td><button type="" class="availableButton"> </button></td>
+                <td><button type="" class="availableButton"> </button></td>
+                <td><button type="" class="availableButton"> </button></td>
+                <td><button type="" class="availableButton"> </button></td>
             </tr>
         {{/each }}
 
