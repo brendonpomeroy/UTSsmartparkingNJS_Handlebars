@@ -102,7 +102,7 @@ router.post('/showReceipt',function(req,res) {
 
 
 router.get('/dashboard', function(req, res, next) {
-    res.render('dashboard', {ind: 0});
+    res.render('dashboard');
 });
 
 router.get('/manageSpaces', function(req, res) {
@@ -175,7 +175,7 @@ router.get('/account', function(req, res, next) {
         res.render('index');
     }
 
-    res.render('account', { user: req.session.user, ind: 4});
+    res.render('account', { user: req.session.user});
 });
 
 router.get('/manageUsers', function(req, res) {
@@ -183,7 +183,7 @@ router.get('/manageUsers', function(req, res) {
         if(err) {
             console.log(err);
         } else {
-            res.render('manageUsers', { users: userDB, ind: 3} )
+            res.render('manageUsers', { users: userDB} )
         }
     });
 });

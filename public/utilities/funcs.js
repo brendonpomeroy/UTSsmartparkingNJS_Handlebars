@@ -7,6 +7,14 @@ function HideAndShowNav() {
     }
 }
 
-function highLightNav(id){
-  document.getElementById("myTopNav").getElementsByTagName('a')[id].classList.add('active');
+// function highLightNav(id){
+//   document.getElementById("myTopNav").getElementsByTagName('a')[id].classList.add('active');
+// }
+
+function highLightThis(){
+  var link = document.querySelectorAll('.nav a');
+  for (var i = 0; i < link.length; i++){
+    if (link[i].href == document.URL)
+      link[i].classList.add('active');
+  }
 }
