@@ -1,0 +1,191 @@
+<div class="contentContainer">
+    <h1>{{title}}</h1>
+    <script>
+        todaysDate = new Date();
+
+        function setGlobalDate(day) {
+            let date;
+            let todaysDate = new Date();
+            if (day == "Today") {
+                date = todaysDate.getDate().toString() + "/" + (todaysDate.getMonth()+1).toString() + "/" + todaysDate.getFullYear().toString();
+            }
+            else if (day == "Tomorrow") {
+                date = (todaysDate.getDate()+1).toString() + "/" + (todaysDate.getMonth()+1).toString() + "/" + todaysDate.getFullYear().toString();
+            }
+            else {
+                date = (todaysDate.getDate()+2).toString() + "/" + (todaysDate.getMonth()+1).toString() + "/" + todaysDate.getFullYear().toString();
+            }
+            document.getElementById('hiddenDate').value = date;
+        }
+
+        $(document).ready(function () {
+            $('.displaySpaces').click(function () {
+                var day = $(this).attr("id");
+                setGlobalDate(day);
+                $.ajax({
+                    url: "/getSpaces",
+                    method: "post",
+                    data: {day: day},
+                    success: function (spaces) {
+                        let htmlString = "<table id=\"spaces\"><tr><th>Space</th><th>Type</th><th>07:00</th><th>08:00</th><th>09:00</th><th>10:00</th><th>11:00</th><th>12:00</th><th>13:00</th><th>14:00</th><th>15:00</th><th>16:00</th><th>17:00</th><th>18:00</th><th>19:00</th><th>20:00</th><th>21:00</th><th>22:00</th></tr>";
+                        for (var spacesItr = 0; spacesItr < spaces.length; spacesItr++) {
+                            //display space details
+                            htmlString += "<tr><td>" + String(spaces[spacesItr].spaceID) + "</td><td>" + spaces[spacesItr].spaceType + "</td>";
+                            for (let bookingsItr = 0; bookingsItr < spaces[spacesItr].bookings.length; bookingsItr++) {
+                                if (spaces[spacesItr].bookings[bookingsItr]) {
+                                    let availableItr = bookingsItr;
+                                    let availableCounter = 0;
+                                    while (spaces[spacesItr].bookings[availableItr] && availableItr <= spaces.length) {
+                                        availableCounter++;
+                                        availableItr++;
+                                    }
+                                    //print out available button with avaiable counter
+                                    htmlString += "<td>" + "<button class=\"available\" onClick=\"bookIn(" + String(spaces[spacesItr].spaceID) + ", " + String(bookingsItr + 7) + ", " + String(availableCounter) + ")\">" + "</td>"
+                                } else {
+                                    //print out unavailable
+                                    htmlString += "<td><div class=\"unavailable\"></div></td>";
+                                }
+                            }
+                            htmlString += "</tr>";
+                        }
+                        htmlString += "</table>";
+                        //insert html into the page
+                        console.log(htmlString);
+                        $("#spacesContainer").html(htmlString);
+                    }
+                });
+            });
+        });
+
+        function bookIn(space, hour, count, date) {
+
+            var date = new Date();
+
+            var dateFormatted = document.getElementById("hiddenDate").value;
+
+            document.getElementById("spaceID").innerHTML = space;
+            $('[name="spaceID"]').val(space);
+            document.getElementById("date").innerHTML = dateFormatted;
+            $('[name="date"]').val(dateFormatted);
+            document.getElementById("timeFrom").innerHTML = hour + ":00";
+            $('[name="timeFrom"]').val(hour);
+
+            $('#hours').empty()
+            var hourOptions = document.getElementById("hours");
+
+            for (var i = 1; i <= count; i++) {
+                //var option = document.createElement("option");
+                //option.text = i.toString();
+                //hourOptions.add(option);
+                $('#hours').append('<option value="' + i.toString() + '">' + i.toString() + '</option>')
+            }
+            $('#bookingWindow').modal("show");
+
+        }
+
+        var thirdDay = new Date();
+
+        thirdDay.setDate(thirdDay.getDate() + 2);
+        var days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+        document.getElementById("thirdDayButton").value = days[thirdDay.getDay()];
+
+        var day = document.getElementById("selectedDay").value;
+
+        if (day.trim() == "Today") {
+            setCurrentButton("todayButton");
+        }
+        else if (day.trim() == "Tomorrow") {
+            setCurrentButton("tomorrowButton");
+        }
+        else {
+            setCurrentButton("thirdDayButton");
+        }
+
+        function setDay(selectedDay) {
+            document.getElementById("selectedDay").value = selectedDay;
+        }
+
+        function setCurrentButton(currDay) {
+            document.getElementById(currDay).style.border = "solid #0f4beb";
+            document.getElementById(currDay).style.background = "#ffffff";
+            document.getElementById(currDay).style.color = "#0f4beb";
+        }
+
+
+    </script>
+
+    <input type="hidden" id="hiddenDate" value="">
+    <h2>Alternative Get Spaces</h2>
+
+
+    <div id="searchController">
+        <table>
+            <tr>
+                <td>
+                    <input type="submit" name="day" id="Today" class="buttons displaySpaces" value="Today">
+                </td>
+                <td>
+                    <input type="submit" name="day" id="Tomorrow" class="buttons displaySpaces" value="Tomorrow">
+                </td>
+                <td>
+                    <input type="submit" name="day" id="thirdDayButton" class="buttons displaySpaces" value="">
+                </td>
+            </tr>
+        </table>
+    </div>
+
+
+    <div id="spacesContainer"></div>
+
+
+    <div class="modal fade" id="bookingWindow" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title">Book Space</h3>
+                </div>
+                <form method="post" action="/bookSpace">
+                    <div class="modal-body">
+                        <p>
+                        <div id="bookingDetails">
+                            <table>
+                                <tr>
+                                    <th>Space:</th>
+                                    <td>
+                                        <span id="spaceID"></span>
+                                        <input type="hidden" name="spaceID" value="">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>Date:</th>
+                                    <td>
+                                        <span id="date"></span>
+                                        <input type="hidden" name="date" value="">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>Time From:</th>
+                                    <td>
+                                        <span id="timeFrom"></span>
+                                        <input type="hidden" name="timeFrom" value="">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>Hours:</th>
+                                    <td>
+                                        <select id="hours" class="form-control" name="hours"></select>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                        </p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-dark" data-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Book</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
