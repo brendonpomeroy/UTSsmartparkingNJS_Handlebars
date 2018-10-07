@@ -296,6 +296,36 @@ router.post('/addUser', function(req, res, next) {
     });
 });
 
+router.post('/getUserData', function(req, res) {
+    userID = req.body.userID;
+    userModel.findOne({ userID: parseInt(userID)}, function(err, user) {
+        if (err) {
+            //error occurred
+            console.log(err);
+            res.render('manageUsers', { status: "An error occurred"} )
+        }
+        if (!user) {
+            //No valid user found
+            res.render('manageUsers', { status: "An error occurred"} )
+        } else {
+            //user found
+            bookingModel.findOne({ userID: parseInt(userID)}, function(err, bookings) {
+                if (err) {
+                    //error occurred
+                    console.log(err);
+                    res.render('manageUsers', { status: "An error occurred"} )
+                } else {
+                    //user found
+                    //res.writeHead(200, { 'Content-Type': 'application/json' });
+                    res.send({user: user, bookings: bookings});
+                }
+            });
+        }
+    });
+
+
+});
+
 
 
 //this function removes personal booking data from the list that will be sent to the client browser.
