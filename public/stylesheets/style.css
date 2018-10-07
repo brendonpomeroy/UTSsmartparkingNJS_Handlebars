@@ -177,6 +177,10 @@ th, td {
   height: 100%;
 }
 
+.contentContainer {
+  padding: 50px;
+}
+
 /*
 .footer {
   background-color: black;
