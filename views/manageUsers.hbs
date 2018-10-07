@@ -3,39 +3,42 @@
 <h1>Manage Users</h1>
 <p>Welcome to User management</p>
 
-<section>
-    <h2>Add User</h2>
-    <form action="/addUser" method="post">
-        UserID <input type="text" id="userID" class="form-control" name="userID">
-        Name<input type="text" id="name" name="name">
-        Phone<input type="text" id="phone" name="phone">
-        Email<input type="text" id="email" name="email">
-        User Type<input type="text" id="usertype" name="usertype">
-        Password<input type="text" id="password" name="password">
-        <button type="submit">INSERT</button>
-    </form>
+    <div style="width: 500px">
+        <h3>Add User</h3>
+        <form action="/addUser" method="post">
 
-</section>
+            UserID <input type="text" id="userID" class="form-control" name="userID">
+            <br>
+            Name<input class="form-control" type="text" id="name" name="name">
+            <br>
+            Phone<input class="form-control" type="text" id="phone" name="phone">
+            <br>
+            Email<input class="form-control" type="text" id="email" name="email">
+            <br>
+            User Type
+            <select name="usertype" class="form-control">
+                <option value="User">User</option>
+                <option value="Admin">Admin</option>
+            </select>
+            <br>
+            Password<input class="form-control" type="text" id="password" name="password">
+            <br>
+            <button type="submit" class="btn btn-lg btn-primary btn-block">Add User</button>
 
-<section>
-    <h2>Delete User</h2>
-    <form action="/deleteUser" method="delete">
-        UserID <input type="text" id="userID" name="userID">
-    </form>
-    <button type="submit">DELETEEE</button>
-</section>
+        </form>
+
+    </div>
 
 <section class="users">
-    <h2>Current Users</h2>
-
+    <h3>Current Users</h3>
     <table style="width:100%">
         <tr>
-            <th>ID</th>
-            <th>Name</th>
-            <th>Phone Number</th>
-            <th>Email</th>
-            <th>User Type</th>
-            <th>Options</th>
+            <th width="14%">ID</th>
+            <th width="14%">Name</th>
+            <th width="14%">Phone Number</th>
+            <th width="28%">Email</th>
+            <th width="14%">User Type</th>
+            <th width="14%">Options</th>
         </tr>
         {{# each users}}
             <tr>
@@ -52,7 +55,6 @@
             </tr>
         {{/each }}
     </table>
-    </div>
 </section>
 
 

@@ -1,36 +1,54 @@
 
-
+<div class="contentContainer">
 <section>
-    <h2>Edit Space</h2>
-    <form action="/updateSpace" method="post">
-        <table>
-            <tr>
-                <td>
-                    Space Number:
-                </td>
-                <td>
-                    <input type="text">
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    Location ID:
-                </td>
-                <td>
-                    <input type="text">
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    Space Type:
-                </td>
-                <td>
-                    <input type="text">
-                </td>
-            </tr>
-        </table>
-        <input type="submit" class="buttons">
-    </form>
+
+    <div class="modal fade" id="editDetailsModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title">Edit Space</h3>
+                </div>
+                <div class="modal-body">
+                    <p>
+                    <div id="userDetails">
+                        <h4>Details</h4>
+                    <form method="post" action="/updateSpace">
+                        <table>
+                            <tr>
+                                <th>Space ID:</th>
+                                <td><span id="spaceID"></span></td>
+                            </tr>
+                            <tr>
+                                <th>Location ID:</th>
+                                <td><span id="locationID"></span></td>
+                            </tr>
+                            <tr>
+                                <th>Space Type:</th>
+                                <td>
+                                    <select class="form-control" name="spaceType" id="spaceType">
+                                        <option id="regular">Regular</option>
+                                        <option id="disabled">Disabled</option>
+                                    </select>
+                                </td>
+                            </tr>
+                        </table>
+                    </form>
+                    </div>
+                    </p>
+                </div>
+                <div class="modal-footer">
+
+                    <input type="hidden" value="{{user.userID}}">
+                    <button type="button" class="btn btn-dark" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">Save Changes</button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
 </section>
 
 <section class="bookings">
@@ -49,8 +67,29 @@
                 <td> {{ this.spaceID }} </td>
                 <td> {{ this.locationID }} </td>
                 <td> {{ this.spaceType }} </td>
+                <td> <button class="btn btn-primary editSpace" id="{{ this.spaceID }}" data-toggle="modal"
+                             data-target="#editDetailsModal">Edit</button> </td>
             </tr>
         {{/each }}
     </table>
     </div>
 </section>
+</div>
+<script>
+    $(document).ready(function () {
+        $('.editSpace').click(function () {
+            var spaceID = $(this).attr("id");
+            $.ajax({
+                url: "/getSpaceData",
+                method: "post",
+                data: {spaceID: spaceID},
+                success: function (data) {
+                    //$('#userDetails').html(data);
+                    $('#spaceID').html(data.space.spaceID);
+                    $('#locationID').html(data.space.locationID);
+                    $('#spaceType').val(data.space.spaceType);
+                }
+            });
+        });
+    });
+</script>
