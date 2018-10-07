@@ -25,18 +25,18 @@
                         Cannot cancel
                     {{else}}
                         <form action="/cancelBooking" method="post"><input type="hidden" name="bookingID" value="{{this.bookingID}}">
-                            <input type="submit" value="cancel" class="smallButton">
+                            <input type="submit" value="cancel" class="btn btn-danger">
                         </form>
                     {{/if}}
                 </td>
                 <td>
                     {{#if this.isPaid}}
                         <form action="/showReceipt" method="post"><input type="hidden" name="receiptID" value="{{this.receipt}}">
-                            <input type="submit" value="Receipt" class="smallButton">
+                            <input type="submit" value="Receipt" class="btn btn-primary">
                         </form>
                     {{else}}
                     <form action="/payPortal" method="post"><input type="hidden" name="bookingID" value="{{this.bookingID}}">
-                        <input type="submit" value="Pay" class="smallButton">
+                        <input type="submit" value="Pay" class="btn btn-primary">
                     </form>
                     {{/if}}
                 </td>

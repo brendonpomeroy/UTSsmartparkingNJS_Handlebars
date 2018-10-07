@@ -68,10 +68,10 @@ router.post('/pay', function(req, res) {
         receipt.save(function (err, addedReceipt) {
             if (err) {
                 console.log(err);
-                res.render('bookings', { status: "Cannot Process Receipt at this time"})
+                res.redirect('bookings')
             } else {
                 console.log(addedReceipt);
-                res.render('bookings', { status: "Payment Successful" , receipt: addedReceipt})
+                res.redirect('bookings')
             }
         });
     }
@@ -125,6 +125,10 @@ router.post('/updateSpace', function(req, res) {
 
 router.post('/bookSpace', function(req, res, next) {
     //function()
+    console.log(req.body.spacesID);
+    console.log(req.body.date);
+    console.log(req.body.timeFrom);
+    console.log(req.body.hours);
     let booking = new bookingModel();
     //booking.bookingID = getID();
     booking.userID = req.session.user.userID; //user id - automatically taken from the session
@@ -138,7 +142,7 @@ router.post('/bookSpace', function(req, res, next) {
             console.log(err);
         } else {
             console.log('Booking: ' + confirmedBooking);
-            res.render('bookings', { status: "success"} );
+            res.redirect('/bookings');
         }
     });
 });
@@ -166,8 +170,18 @@ router.get('/bookings', function(req, res, next) {
 });
 
 router.post('/cancelBooking', function(req, res) {
-    //check if timeFrom has passed
     //update the database
+
+    let bookingID = req.body.bookingID;
+
+    bookingModel.deleteOne({_id: bookingID}, function (err) {
+        if (err) {
+            console.log(err);
+            return res.status(500).send();
+        }
+        res.redirect(`/bookings`);
+    });
+
 });
 
 router.get('/account', function(req, res, next) {
@@ -193,7 +207,7 @@ router.get('/manageUsers', function(req, res) {
 //opens the database Spaces collection and stores it in a list temporarily
 //the Bookings are then queried with the .find() function ***this will need the correct date added***
 //the booking collection is also stored in a temporary list and sent filterSpaces() to remove private data.
-router.get('/getSpaces', function(req, res) {
+router.get('/altgetSpaces', function(req, res) {
     let spaces = [];
     let bookings = [];
     let filteredSpaces = [];
@@ -242,13 +256,12 @@ router.post('/login', function(req, res) {
         if(err) {
             console.log(err);
             res.render('dashboard', { status: "error" } )
-        }
-        if (!user) {
+        } else if (!user) {
             res.render('index', { layout: false, status: "Not valid a valid user" } )
+        } else {
+            req.session.user = user;
+            res.render('dashboard');
         }
-        req.session.user = user;
-        res.render('dashboard',)
-
 
     });
 });
@@ -269,7 +282,7 @@ router.post('/deleteUser', function(req, res, next) {
                 console.log(err);
                 return res.status(500).send();
             }
-            res.redirect(`/manageUsers`)
+            res.redirect(`/manageUsers`);
         });
 });
 
@@ -340,11 +353,11 @@ router.post('/getSpaceData', function(req, res) {
     });
 });
 
-router.get('/altShowSpaces', function(req, res) {
+router.get('/showSpaces', function(req, res) {
     res.render('altBookSpace');
 });
 
-router.post('/altGetSpaces', function(req, res) {
+router.post('/getSpaces', function(req, res) {
     let spaces = [];
     let bookings = [];
     let filteredSpaces = [];
@@ -368,18 +381,19 @@ router.post('/altGetSpaces', function(req, res) {
             console.log(err);
         } else {
             bookings = bookingsDB;
+            spaceModel.find({}, function(err, spaceDB) {
+                if(err) {
+                    console.log(err);
+                } else {
+                    spaces = spaceDB;
+                }
+                filteredSpaces = filterSpaces(spaces, bookings);
+                console.log(filteredSpaces);
+                res.send(filterSpaces(spaces, bookings)); //may need some sequential support
+            });
         }
     });
-    spaceModel.find({}, function(err, spaceDB) {
-        if(err) {
-            console.log(err);
-        } else {
-            spaces = spaceDB;
-        }
-        filteredSpaces = filterSpaces(spaces, bookings);
-        console.log(filteredSpaces);
-        res.send(filterSpaces(spaces, bookings)); //may need some sequential support
-    });
+
 });
 
 
