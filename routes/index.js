@@ -340,6 +340,48 @@ router.post('/getSpaceData', function(req, res) {
     });
 });
 
+router.get('/altShowSpaces', function(req, res) {
+    res.render('altBookSpace');
+});
+
+router.post('/altGetSpaces', function(req, res) {
+    let spaces = [];
+    let bookings = [];
+    let filteredSpaces = [];
+
+    let date;
+    let todaysDate = new Date();
+    if (req.body.day == "Today") {
+        date = todaysDate.getDate().toString() + "/" + (todaysDate.getMonth()+1).toString() + "/" + todaysDate.getFullYear().toString();
+    }
+    else if (req.body.day == "Tomorrow") {
+        date = (todaysDate.getDate()+1).toString() + "/" + (todaysDate.getMonth()+1).toString() + "/" + todaysDate.getFullYear().toString();
+    }
+    else {
+        date = (todaysDate.getDate()+2).toString() + "/" + (todaysDate.getMonth()+1).toString() + "/" + todaysDate.getFullYear().toString();
+    }
+    console.log(date);
+
+
+    bookingModel.find({ date: date }, function(err, bookingsDB) {
+        if(err) {
+            console.log(err);
+        } else {
+            bookings = bookingsDB;
+        }
+    });
+    spaceModel.find({}, function(err, spaceDB) {
+        if(err) {
+            console.log(err);
+        } else {
+            spaces = spaceDB;
+        }
+        filteredSpaces = filterSpaces(spaces, bookings);
+        console.log(filteredSpaces);
+        res.send(filterSpaces(spaces, bookings)); //may need some sequential support
+    });
+});
+
 
 
 //this function removes personal booking data from the list that will be sent to the client browser.
