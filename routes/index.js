@@ -261,16 +261,15 @@ router.post('/updateUser', function(req, res, next) {
     }
 });
 
-router.delete('/deleteUser', function(req, res, next) {
-        let user = req.body.userID;
+router.post('/deleteUser', function(req, res, next) {
+        let userID = req.body.deleteUserID;
 
-        userModel.findOneAndRemove({userID: user}, function (err) {
+        userModel.deleteOne({userID: userID}, function (err) {
             if (err) {
                 console.log(err);
                 return res.status(500).send();
             }
-            res.redirect(`manageUsers`, {status: "Successfully deleted user."})
-            //return res.status(200).send();
+            res.redirect(`/manageUsers`)
         });
 });
 
@@ -291,7 +290,52 @@ router.post('/addUser', function(req, res, next) {
             res.status(500).send();
         } else {
             //console.log('User added: ' + addedUser.name())
-            res.render('manageUsers', { status: "successfully added user"} )
+            res.redirect('/manageUsers');
+        }
+    });
+});
+
+router.post('/getUserData', function(req, res) {
+    userID = req.body.userID;
+    userModel.findOne({ userID: parseInt(userID)}, function(err, user) {
+        if (err) {
+            //error occurred
+            console.log(err);
+            res.render('manageUsers', { status: "An error occurred"} )
+        }
+        if (!user) {
+            //No valid user found
+            res.render('manageUsers', { status: "An error occurred"} )
+        } else {
+            //user found
+            bookingModel.findOne({ userID: parseInt(userID)}, function(err, bookings) {
+                if (err) {
+                    //error occurred
+                    console.log(err);
+                    res.render('manageUsers', { status: "An error occurred"} )
+                } else {
+                    //user found
+                    //res.writeHead(200, { 'Content-Type': 'application/json' });
+                    res.send({user: user, bookings: bookings});
+                }
+            });
+        }
+    });
+});
+
+router.post('/getSpaceData', function(req, res) {
+    spaceID = req.body.spaceID;
+    spaceModel.findOne({ spaceID: spaceID}, function(err, space) {
+        if (err) {
+            //error occurred
+            console.log(err);
+            res.render('manageSpaces', { status: "An error occurred"} )
+        } else if (!space) {
+            //error occurred
+            console.log("Space not found");
+            res.render('manageSpaces', {status: "An error occurred"})
+        } else {
+            res.send({space: space});
         }
     });
 });
