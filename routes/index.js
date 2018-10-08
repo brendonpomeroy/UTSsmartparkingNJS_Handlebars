@@ -77,7 +77,7 @@ router.post('/pay', function(req, res) {
     }
 });
 
-router.post('showPP')
+router.post('showPP);
 
 router.post('/showReceipt',function(req,res) {
     console.log(req.body.receiptID);
