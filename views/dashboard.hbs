@@ -1,5 +1,6 @@
+<div class="contentContainer">
 <h1>Dashboard</h1>
-
+<!--
 <div class = "board">
   <h1>Note</h1>
   <p>By entering the UTS Car Park, you(together with any passengers) agree to our conditions and terms. </p>
@@ -27,7 +28,28 @@
     </tr>
   </table>
 </div>
+-->
 
-Status: {{{ status }}}
+<br><br>
+{{# bookings}}
+<div class="dashboardCards">
+    <div>
+        <table class="dashboardCardsTable">
+            <tr>
+                <th>Space</th>
+                <th>From</th>
+                <th>To</th>
+                <th>Date</th>
+            </tr>
+            <tr>
+                <td>{{this.spaceID}}</td>
+                <td>{{this.timeFrom}}:00</td>
+                <td>{{this.timeTo}}:00</td>
+                <td>{{this.date}}</td>
+            </tr>
+        </table>
+    </div>
+</div>
+{{/bookings}}
 
-User: {{{ user }}}
+</div>

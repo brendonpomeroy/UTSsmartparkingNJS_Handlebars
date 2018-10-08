@@ -190,6 +190,17 @@ th, td {
   padding: 50px;
 }
 
+.dashboardCards {
+  padding: 10px;
+  margin: 10px;
+  background-color: lightgrey;
+  border-radius: 8px;
+}
+
+.dashboardCardsTable {
+  border: none;
+}
+
 /*
 .footer {
   background-color: black;

@@ -3,6 +3,7 @@
     <script>
         todaysDate = new Date();
 
+
         function setGlobalDate(day) {
             let date;
             let todaysDate = new Date();
@@ -19,6 +20,18 @@
         }
 
         $(document).ready(function () {
+            $("#hours").change(function() {
+                let hours = $(this).val();
+                if (hours <= 2) {
+                    $("#price").html("$"+(hours * 10).toString()+".00");
+                } else if (hours > 2 && hours < 8) {
+                    $("#price").html("$"+(hours * 8).toString()+".00");
+                } else {
+                    $("#price").html("$60.00");
+                }
+
+            });
+
             $('.displaySpaces').click(function () {
                 var day = $(this).attr("id");
                 setGlobalDate(day);
@@ -50,7 +63,6 @@
                         }
                         htmlString += "</table>";
                         //insert html into the page
-                        console.log(htmlString);
                         $("#spacesContainer").html(htmlString);
                     }
                 });
@@ -175,6 +187,10 @@
                                     <td>
                                         <select id="hours" class="form-control" name="hours"></select>
                                     </td>
+                                </tr>
+                                <tr>
+                                    <th>Price:</th>
+                                    <td><span id="price" name="price"></span><input type="hidden" name="price" value=""></td>
                                 </tr>
                             </table>
                         </div>

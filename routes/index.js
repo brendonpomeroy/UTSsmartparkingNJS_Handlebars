@@ -12,7 +12,8 @@ var bookingSchema = new Schema({
     spaceID: Number,
     date: String,
     timeFrom: Number,
-    timeTo: Number
+    timeTo: Number,
+    price: Number
 });
 
 var userSchema = new Schema({
@@ -102,7 +103,17 @@ router.post('/showReceipt',function(req,res) {
 
 
 router.get('/dashboard', function(req, res, next) {
-    res.render('dashboard');
+    let date;
+    let todaysDate = new Date();
+    date = todaysDate.getDate().toString() + "/" + (todaysDate.getMonth()+1).toString() + "/" + todaysDate.getFullYear().toString();
+
+    bookingModel.find({ date: date, userID: req.session.user.userID }, function(err, bookingsDB) {
+        if(err) {
+            console.log(err);
+        } else {
+            res.render('dashboard', {bookings: bookingsDB});
+        }
+    });
 });
 
 router.get('/manageSpaces', function(req, res) {
@@ -138,6 +149,16 @@ router.post('/bookSpace', function(req, res, next) {
     console.log(req.body.date);
     console.log(req.body.timeFrom);
     console.log(req.body.hours);
+    let inputHours = req.body.hours;
+    let price;
+    if (inputHours <= 2) {
+        price = inputHours * 10;
+    } else if (inputHours > 2 && hours < 8) {
+        price = inputHours * 8;
+    } else {
+        price = 60;
+    }
+
     let booking = new bookingModel();
     //booking.bookingID = getID();
     booking.userID = req.session.user.userID; //user id - automatically taken from the session
@@ -145,6 +166,7 @@ router.post('/bookSpace', function(req, res, next) {
     booking.date = req.body.date;//date
     booking.timeFrom = parseInt(req.body.timeFrom);//time from
     booking.timeTo = parseInt(req.body.timeFrom) + parseInt(req.body.hours);//time to
+    booking.price = price;
     console.log(booking);
     booking.save(function(err, confirmedBooking) {
         if (err) {
@@ -276,7 +298,38 @@ router.post('/login', function(req, res) {
 });
 
 router.post('/updateUser', function(req, res, next) {
-
+    //update the database
+    let userID = req.session.userID;
+    let name = req.body.name;
+    let phone = req.body.phone;
+    let email = req.body.email;
+    let password = req.body.password;
+    if (password.length > 0) {
+        userModel.findOneAndUpdate({userID: userID}, {
+            name: name,
+            phone: phone,
+            email: email,
+            password: password
+        }, function (err) {
+            if (err) {
+                console.log(err);
+            } else {
+                res.redirect('/account');
+            }
+        });
+    } else {
+        userModel.findOneAndUpdate({userID: userID}, {
+            name: name,
+            phone: phone,
+            email: email
+        }, function (err) {
+            if (err) {
+                console.log(err);
+            } else {
+                res.redirect('/account');
+            }
+        });
+    }
 });
 
 router.post('/deleteUser', function(req, res, next) {
