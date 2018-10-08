@@ -68,10 +68,10 @@ router.post('/pay', function(req, res) {
         receipt.save(function (err, addedReceipt) {
             if (err) {
                 console.log(err);
-                res.redirect('bookings')
+                res.redirect('/bookings')
             } else {
                 console.log(addedReceipt);
-                res.redirect('bookings')
+                res.redirect('/bookings')
             }
         });
     }
@@ -121,6 +121,15 @@ router.get('/manageSpaces', function(req, res) {
 
 router.post('/updateSpace', function(req, res) {
     //update the database
+    let spaceID = req.body.spaceID;
+    let spaceType = req.body.spaceType;
+    spaceModel.findOneAndUpdate({spaceID: spaceID}, {spaceType: spaceType}, function(err){
+        if (err){
+            console.log(err);
+        } else {
+            res.redirect('/manageSpaces');
+        }
+    });
 });
 
 router.post('/bookSpace', function(req, res, next) {
@@ -267,11 +276,7 @@ router.post('/login', function(req, res) {
 });
 
 router.post('/updateUser', function(req, res, next) {
-    if (req.session.user.userType == "Admin") {
-        //delete the user
-    } else {
-        res.status(404).send();
-    }
+
 });
 
 router.post('/deleteUser', function(req, res, next) {

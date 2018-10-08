@@ -16,7 +16,7 @@
                         <table>
                             <tr>
                                 <th>Space ID:</th>
-                                <td><span id="spaceID"></span></td>
+                                <td><input type="hidden" name="spaceID" value=""><span id="spaceID"></span></td>
                             </tr>
                             <tr>
                                 <th>Location ID:</th>
@@ -32,16 +32,16 @@
                                 </td>
                             </tr>
                         </table>
+                        <div class="modal-footer">
+
+                            <input type="hidden" value="{{user.userID}}">
+                            <button type="button" class="btn btn-dark" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Save Changes</button>
+
+                        </div>
                     </form>
                     </div>
                     </p>
-                </div>
-                <div class="modal-footer">
-
-                    <input type="hidden" value="{{user.userID}}">
-                    <button type="button" class="btn btn-dark" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary" data-dismiss="modal">Save Changes</button>
-
                 </div>
             </div>
         </div>
@@ -86,6 +86,7 @@
                 success: function (data) {
                     //$('#userDetails').html(data);
                     $('#spaceID').html(data.space.spaceID);
+                    $("[name='spaceID']").val(data.space.spaceID);
                     $('#locationID').html(data.space.locationID);
                     $('#spaceType').val(data.space.spaceType);
                 }
