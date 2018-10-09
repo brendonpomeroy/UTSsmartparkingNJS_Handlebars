@@ -114,8 +114,9 @@
                     </tr>
                 </table>
                 </div>
-                <div id="userBookings">
+                <div>
                     <h4>User Bookings</h4>
+                    <div id="userBookings"></div>
                 </div>
                 </p>
             </div>
@@ -146,6 +147,26 @@
                     $('#userPhone').html(data.user.phone);
                     $('#userEmail').html(data.user.email);
                     $('#userType').html(data.user.userType);
+                    //$('#userDetailsModal').modal("show");
+
+                }
+            });
+            $.ajax({
+                url: "/getUserBookings",
+                method: "post",
+                data: {userID: userID},
+                success: function (bookings) {
+                    console.log(bookings);
+                    let htmlString = "<table><tr><th>Booking ID</th><th>Space</th><th>Date</th><th>From</th><th>To</th></tr>";
+                    for (let booking in bookings) {
+                        htmlString += "<tr><td>" + booking.bookingID + "</td><td>";
+                        htmlString += booking.spaceID + "</td><td>";
+                        htmlString += booking.date + "</td><td>";
+                        htmlString += booking.timeFrom + ":00</td><td>";
+                        htmlString += booking.timeTo + ":00</td></tr>";
+                    }
+                    htmlString+="</table>";
+                    $("#userBookings").html(htmlString);
                     $('#userDetailsModal').modal("show");
                 }
             });
@@ -157,3 +178,4 @@
     });
 
 </script>
+

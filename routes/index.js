@@ -33,6 +33,7 @@ var spaceSchema = new Schema({
 
 var receiptSchema = new Schema({
     bookingID: Schema.Types.ObjectId,
+    price: Number,
     date: String
 });
 
@@ -52,27 +53,38 @@ router.post('/payPortal', function(req, res) {
 });
 
 router.post('/pay', function(req, res) {
+    let bookingID = req.body.bookingID;
     //check if thepayment was successful
     if (req.body.paymentStatus == "fail") {
         res.render('bookings', { status: "Payment Failed"} )
     } else {
-        //set the date and time for the database
-        let todaysDate = new Date();
-        let date = todaysDate.getDate().toString() + "/" + (todaysDate.getMonth() + 1).toString() + "/" + todaysDate.getFullYear().toString() + " " + (todaysDate.getHours() + 1).toString() + ":" + (todaysDate.getMinutes() + 1).toString();
-
-        //create the receipt
-        let receipt = new receiptModel(); //must create a new instance of the model when creating a user.
-        receipt.bookingID = req.body.bookingID;
-        receipt.date = date;
-
-        //add the receipt to the database
-        receipt.save(function (err, addedReceipt) {
-            if (err) {
+        bookingModel.findOne({_id: bookingID}, function(err, booking){
+            if (err){
                 console.log(err);
-                res.redirect('/bookings')
+            } else if (!booking) {
+                console.log(err);
+                res.redirect('/bookings');
             } else {
-                console.log(addedReceipt);
-                res.redirect('/bookings')
+                //set the date and time for the database
+                let todaysDate = new Date();
+                let date = todaysDate.getDate().toString() + "/" + (todaysDate.getMonth() + 1).toString() + "/" + todaysDate.getFullYear().toString() + " " + (todaysDate.getHours() + 1).toString() + ":" + (todaysDate.getMinutes() + 1).toString();
+
+                //create the receipt
+                let receipt = new receiptModel(); //must create a new instance of the model when creating a user.
+                receipt.bookingID = bookingID;
+                receipt.price = booking.price;
+                receipt.date = date;
+
+                //add the receipt to the database
+                receipt.save(function (err, addedReceipt) {
+                    if (err) {
+                        console.log(err);
+                        res.redirect('/bookings')
+                    } else {
+                        console.log(addedReceipt);
+                        res.redirect('/bookings')
+                    }
+                });
             }
         });
     }
@@ -144,16 +156,12 @@ router.post('/updateSpace', function(req, res) {
 });
 
 router.post('/bookSpace', function(req, res, next) {
-    //function()
-    console.log(req.body.spacesID);
-    console.log(req.body.date);
-    console.log(req.body.timeFrom);
-    console.log(req.body.hours);
+    //
     let inputHours = req.body.hours;
     let price;
     if (inputHours <= 2) {
         price = inputHours * 10;
-    } else if (inputHours > 2 && hours < 8) {
+    } else if (inputHours > 2 && inputHours < 8) {
         price = inputHours * 8;
     } else {
         price = 60;
@@ -167,12 +175,10 @@ router.post('/bookSpace', function(req, res, next) {
     booking.timeFrom = parseInt(req.body.timeFrom);//time from
     booking.timeTo = parseInt(req.body.timeFrom) + parseInt(req.body.hours);//time to
     booking.price = price;
-    console.log(booking);
     booking.save(function(err, confirmedBooking) {
         if (err) {
             console.log(err);
         } else {
-            console.log('Booking: ' + confirmedBooking);
             res.redirect('/bookings');
         }
     });
@@ -291,7 +297,7 @@ router.post('/login', function(req, res) {
             res.render('index', { layout: false, status: "Not valid a valid user" } )
         } else {
             req.session.user = user;
-            res.render('dashboard');
+            res.redirect('dashboard');
         }
 
     });
@@ -299,22 +305,24 @@ router.post('/login', function(req, res) {
 
 router.post('/updateUser', function(req, res, next) {
     //update the database
-    let userID = req.session.userID;
+    let userID = req.session.user.userID;
     let name = req.body.name;
     let phone = req.body.phone;
     let email = req.body.email;
     let password = req.body.password;
+    console.log(userID + ", " + name + ", " + phone + ", " + email + ", " + password );
     if (password.length > 0) {
         userModel.findOneAndUpdate({userID: userID}, {
             name: name,
             phone: phone,
             email: email,
             password: password
-        }, function (err) {
+        }, {new: true}, function (err, user) {
             if (err) {
                 console.log(err);
             } else {
                 res.redirect('/account');
+                req.session.user = user;
             }
         });
     } else {
@@ -322,10 +330,11 @@ router.post('/updateUser', function(req, res, next) {
             name: name,
             phone: phone,
             email: email
-        }, function (err) {
+        }, {new: true}, function (err, user) {
             if (err) {
                 console.log(err);
             } else {
+                req.session.user = user;
                 res.redirect('/account');
             }
         });
@@ -413,6 +422,39 @@ router.post('/getSpaceData', function(req, res) {
 
 router.get('/showSpaces', function(req, res) {
     res.render('altBookSpace');
+});
+
+router.post('/getUserBookings', function(req, res) {
+    let userID = req.body.userID;
+    let todaysDate = new Date();
+    let date1 = todaysDate.getDate().toString() + "/" + (todaysDate.getMonth()+1).toString() + "/" + todaysDate.getFullYear().toString();
+    let date2 = (todaysDate.getDate()+1).toString() + "/" + (todaysDate.getMonth()+1).toString() + "/" + todaysDate.getFullYear().toString();
+    let date3 = (todaysDate.getDate()+2).toString() + "/" + (todaysDate.getMonth()+1).toString() + "/" + todaysDate.getFullYear().toString();
+    console.log(date1 + " " + date2 + " " + date3);
+    bookingModel.find({ userID: userID, date: date1 }, function(err, bookings1) {
+        if (err) {
+            console.log(err);
+        } else {
+            console.log(1);
+            bookingModel.find({ userID: userID, date: date2 }, function(err, bookings2) {
+                if (err) {
+                    console.log(err);
+                } else {
+                    console.log(2);
+                    bookingModel.find({userID: userID, date: date3}, function (err, bookings3) {
+                        if (err) {
+                            console.log(err);
+                        } else {
+                            console.log(3);
+                            let bookings = bookings1.concat(bookings2, bookings3);
+                            console.log(bookings);
+                            res.send({ bookings: bookings });
+                        }
+                    });
+                }
+            });
+        }
+    });
 });
 
 router.post('/getSpaces', function(req, res) {
@@ -512,6 +554,7 @@ function filterBookings(bookings, receipts) {
             date: booking.date,
             timeFrom: booking.timeFrom,
             timeTo: booking.timeTo,
+            price: booking.price,
             isPaid: isPaid,
             receipt: receiptID,
             isPast: isPast

@@ -11,6 +11,10 @@
         <td>Payment date:</td>
         <td>{{receipt.date}}</td>
     </tr>
+    <tr>
+        <td>Amount:</td>
+        <td>${{ receipt.price }}.00</td>
+    </tr>
 </table>
 </p>
 <p>
@@ -31,6 +35,10 @@
     <tr>
         <td>Time:</td>
         <td>{{booking.timeFrom}}:00 to {{booking.timeTo}}:00</td>
+    </tr>
+    <tr>
+        <td>Price:</td>
+        <td>${{ booking.price }}.00</td>
     </tr>
 </table>
 </p>

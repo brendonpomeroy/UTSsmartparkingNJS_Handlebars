@@ -1,5 +1,4 @@
-<h1></h1>
-<p>Welcome to <script>document.write(({{ receipt._id }}).toString())</script></p>
+<div class="contentContainer">
 
 <section class="bookings">
     <h2>Bookings</h2>
@@ -12,6 +11,7 @@
             <th>Date</th>
             <th>From</th>
             <th>To</th>
+            <th>Price</th>
         </tr>
         {{# each bookings }}
             <tr>
@@ -20,6 +20,7 @@
                 <td> {{ this.date }} </td>
                 <td> {{ this.timeFrom }} </td>
                 <td> {{ this.timeTo }}</td>
+                <td> ${{ this.price }}.00 </td>
                 <td>
                     {{#if this.isPast }}
                         Cannot cancel
@@ -43,5 +44,5 @@
             </tr>
         {{/each }}
     </table>
-    </div>
 </section>
+</div>
