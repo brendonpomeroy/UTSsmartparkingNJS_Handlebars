@@ -84,11 +84,11 @@
                             htmlString += '<td><img src="/images/ground.png"></td>';
                           }
                           var hour = new Date().getHours() - 7;
-                          if (hour >= 0 && hour <= 16){
-                            if (spaces[spacesItr].bookings[hour])
+                          if (hour >= 0 && hour <= 16 && spaces[spacesItr].bookings[hour]){
                               htmlString += '<td><img src="/images/available.png"></td>';
-                            else
-                              htmlString += '<td><img src="/images/taken.png"></td>';
+                          }
+                          else{
+                            htmlString += '<td><img src="/images/taken.png"></td>';
                           }
                           if ((spacesItr+1)%10==0){
                             htmlString += '<td><img src="/images/ground.png"></td></tr>';
