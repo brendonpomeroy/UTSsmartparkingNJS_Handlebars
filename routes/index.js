@@ -299,7 +299,7 @@ router.post('/login', function(req, res) {
     userModel.findOne({ userID: parseInt(req.body.userID), password: req.body.password}, function(err, user) {
         if(err) {
             console.log(err);
-            res.render('dashboard', { status: "error" } )
+            res.render('index', { layout: false, status: "Not valid a valid user" } )
         } else if (!user) {
             res.render('index', { layout: false, status: "Not valid a valid user" } )
         } else {
