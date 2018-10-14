@@ -56,7 +56,7 @@ router.post('/pay', function(req, res) {
     let bookingID = req.body.bookingID;
     //check if thepayment was successful
     if (req.body.paymentStatus == "fail") {
-        res.render('bookings', { status: "Payment Failed"} )
+        res.redirect('/bookings');
     } else {
         bookingModel.findOne({_id: bookingID}, function(err, booking){
             if (err){

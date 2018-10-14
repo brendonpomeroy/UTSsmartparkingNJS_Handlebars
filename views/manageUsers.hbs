@@ -7,13 +7,13 @@
         <h3>Add User</h3>
         <form action="/addUser" method="post">
 
-            UserID <input type="text" id="userID" class="form-control" name="userID">
+            UserID <input type="text" id="userID" class="form-control" name="userID" required>
             <br>
-            Name<input class="form-control" type="text" id="name" name="name">
+            Name<input class="form-control" type="text" id="name" name="name" required>
             <br>
-            Phone<input class="form-control" type="text" id="phone" name="phone">
+            Phone<input class="form-control" type="text" id="phone" name="phone" required>
             <br>
-            Email<input class="form-control" type="text" id="email" name="email">
+            Email<input class="form-control" type="email" id="email" name="email" required>
             <br>
             User Type
             <select name="usertype" class="form-control">
@@ -21,7 +21,7 @@
                 <option value="Admin">Admin</option>
             </select>
             <br>
-            Password<input class="form-control" type="text" id="password" name="password">
+            Password<input class="form-control" type="text" id="password" name="password" required>
             <br>
             <button type="submit" class="btn btn-lg btn-primary btn-block">Add User</button>
 

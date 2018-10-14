@@ -48,16 +48,16 @@
                     <form method="post" action="/updateUser">
                         <p>
                             Name:
-                            <input type="text" name="name" class="form-control" value="{{user.name}}">
+                            <input type="text" name="name" class="form-control" value="{{user.name}}" required>
                             <br>
                             ID:<br>
                             <span>{{user.userID}}</span><br>
                             <br>
                             Phone Number
-                            <input type="text" name="phone" class="form-control" value="{{user.phone}}">
+                            <input type="text" name="phone" class="form-control" value="{{user.phone}}" required>
                             <br>
                             Email:
-                            <input type="text" name="email" class="form-control" value="{{user.email}}">
+                            <input type="email" name="email" class="form-control" value="{{user.email}}" required>
                             <br>
                             Password:
                             <input type="password" name="password" class="form-control">
