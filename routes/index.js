@@ -364,22 +364,12 @@ router.post('/getUserData', function(req, res) {
             //No valid user found
             res.render('manageUsers', { status: "An error occurred"} )
         } else {
-            /*/user found
-            bookingModel.findOne({ userID: parseInt(userID)}, function(err, bookings) {
-                if (err) {
-                    //error occurred
-                    console.log(err);
-                    res.render('manageUsers', { status: "An error occurred"} )
-                } else {
-                    //user found
-                    res.send({user: user, bookings: bookings});
-                }
-            });*/
             res.send({user: user});
         }
     });
 });
 
+//returns the information about the space requested
 router.post('/getSpaceData', function(req, res) {
     spaceID = req.body.spaceID;
     spaceModel.findOne({ spaceID: spaceID}, function(err, space) {
