@@ -44,9 +44,8 @@ var spaceModel = mongoose.model('Spaces', spaceSchema);
 var receiptModel = mongoose.model('Receipts', receiptSchema);
 
 /* GET home page. */
-router.get('/', function(req, res) {
-    req.session.isLoggedIn = false;
-    res.render('index', { layout: false });
+router.get('/', function(req, res, next) {
+  res.render('index', { layout: false });
 });
 router.get('/logout', function(req, res) {
     delete req.session.user;
@@ -109,7 +108,7 @@ router.post('/showReceipt',function(req,res) {
                 if (err) {
                     console.log(err);
                 } else {
-                    res.render('receipt', { receipt: receipt, booking: booking, sessionUser: req.session });
+                    res.render('receipt', { receipt: receipt, booking: booking });
                 }
             });
 
@@ -121,24 +120,22 @@ router.post('/showReceipt',function(req,res) {
 
 
 router.get('/dashboard', function(req, res, next) {
-    if (req.session.isLoggedIn != null) {
+    reLogin(req, res);
     let date;
     let todaysDate = new Date();
-    date = todaysDate.getDate().toString() + "/" + (todaysDate.getMonth() + 1).toString() + "/" + todaysDate.getFullYear().toString();
+    date = todaysDate.getDate().toString() + "/" + (todaysDate.getMonth()+1).toString() + "/" + todaysDate.getFullYear().toString();
 
-    bookingModel.find({date: date, userID: req.session.user.userID}, function (err, bookingsDB) {
-        if (err) {
+    bookingModel.find({ date: date, userID: req.session.user.userID }, function(err, bookingsDB) {
+        if(err) {
             console.log(err);
         } else {
-            res.render('dashboard', {bookings: bookingsDB, sessionUser: req.session.user});
+            res.render('dashboard', {bookings: bookingsDB});
         }
     });
-}  else {
-        res.redirect('/');
-    }
 });
 
 router.get('/manageSpaces', function(req, res) {
+    reLogin(req, res);
     if (req.session.user.userType == "Admin") {
         spaceModel.find({}, function (err, spacesDB) {
             if (err) {
@@ -195,6 +192,7 @@ router.post('/bookSpace', function(req, res, next) {
 });
 
 router.get('/bookings', function(req, res, next) {
+    reLogin(req, res);
     let bookings;
     bookingModel.find({ userID: req.session.user.userID }, function(err, userBookings) {
         if(err) {
@@ -226,20 +224,21 @@ router.post('/cancelBooking', function(req, res) {
             console.log(err);
             return res.status(500).send();
         }
-        res.redirect(`/bookings`);
+        res.redirect('/bookings');
     });
 
 });
 
 router.get('/account', function(req, res, next) {
-    if (!req.session.user) {
-        res.render('index');
-    }
-
+    // if (!req.session.user) {
+    //   res.render('index', { layout: false });
+    // }
+    reLogin(req, res);
     res.render('account', { user: req.session.user});
 });
 
 router.get('/manageUsers', function(req, res) {
+    reLogin(req, res);
     userModel.find({}, function(err, userDB) {
         if(err) {
             console.log(err);
@@ -255,6 +254,8 @@ router.get('/manageUsers', function(req, res) {
 //the Bookings are then queried with the .find() function ***this will need the correct date added***
 //the booking collection is also stored in a temporary list and sent filterSpaces() to remove private data.
 router.get('/altgetSpaces', function(req, res) {
+    reLogin(req, res);
+
     let spaces = [];
     let bookings = [];
     let filteredSpaces = [];
@@ -307,7 +308,6 @@ router.post('/login', function(req, res) {
             res.render('index', { layout: false, status: "Not valid a valid user" } )
         } else {
             req.session.user = user;
-            req.session.isLoggedIn = true;
             res.redirect('dashboard');
         }
 
@@ -432,6 +432,8 @@ router.post('/getSpaceData', function(req, res) {
 });
 
 router.get('/showSpaces', function(req, res) {
+  reLogin(req, res);
+
     res.render('altBookSpace');
 });
 
@@ -574,6 +576,12 @@ function filterBookings(bookings, receipts) {
 
     });
     return newBookings;
-}
+  }
+
+  function reLogin(req, res){
+    if (!req.session.user) {
+      res.render('index', { layout: false });
+    }
+  }
 
 module.exports = router;
