@@ -21,6 +21,12 @@ a {
   background: #ccc;
 }
 
+.activeButton { /** for the buttons on bookSpaces **/
+  border: 2px solid #0f4beb !important;
+  background-color: #ffffff !important;
+  color: #0f4beb !important;
+}
+
 
 /** ================ **/
 /** Navigation class **/

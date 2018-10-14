@@ -110,7 +110,7 @@
             setCurrentButton("tomorrowButton");
         }
         else {
-            setCurrentButton("thirdDayButton");
+            //setCurrentButton("thirdDayButton");
         }
 
         function setDay(selectedDay) {
@@ -118,9 +118,13 @@
         }
 
         function setCurrentButton(currDay) {
-            document.getElementById(currDay).style.border = "solid #0f4beb";
-            document.getElementById(currDay).style.background = "#ffffff";
-            document.getElementById(currDay).style.color = "#0f4beb";
+            document.getElementById('Today').classList.remove('activeButton');
+            document.getElementById('Tomorrow').classList.remove('activeButton');
+            document.getElementById('thirdDayButton').classList.remove('activeButton');
+            document.getElementById(currDay).classList.add('activeButton');
+            //document.getElementById(currDay).style.border = "solid #0f4beb";
+            //document.getElementById(currDay).style.background = "#ffffff";
+            //document.getElementById(currDay).style.color = "#0f4beb";
         }
 
 
@@ -134,13 +138,13 @@
         <table>
             <tr>
                 <td>
-                    <input type="submit" name="day" id="Today" class="buttons displaySpaces" value="Today">
+                    <input type="submit" onClick="setCurrentButton('Today')" name="day" id="Today" class="buttons dayButtons displaySpaces" value="Today">
                 </td>
                 <td>
-                    <input type="submit" name="day" id="Tomorrow" class="buttons displaySpaces" value="Tomorrow">
+                    <input type="submit" onClick="setCurrentButton('Tomorrow')" name="day" id="Tomorrow" class="buttons dayButtons displaySpaces" value="Tomorrow">
                 </td>
                 <td>
-                    <input type="submit" name="day" id="thirdDayButton" class="buttons displaySpaces" value="">
+                    <input type="submit" onClick="setCurrentButton('thirdDayButton')" name="day" id="thirdDayButton" class="buttons dayButtons displaySpaces" value="">
                 </td>
             </tr>
         </table>
