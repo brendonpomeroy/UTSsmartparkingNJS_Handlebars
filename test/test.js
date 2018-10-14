@@ -65,7 +65,7 @@ function filterSpaces(spaces, bookings) {
                 }
             }
         });
-        newSpace = {
+        let newSpace = {
             spaceID: space.spaceID,
             spaceType: space.spaceType,
             bookings: timeSlots
