@@ -115,6 +115,7 @@ router.post('/showReceipt',function(req,res) {
 
 
 router.get('/dashboard', function(req, res, next) {
+    reLogin(req, res);
     let date;
     let todaysDate = new Date();
     date = todaysDate.getDate().toString() + "/" + (todaysDate.getMonth()+1).toString() + "/" + todaysDate.getFullYear().toString();
@@ -129,6 +130,7 @@ router.get('/dashboard', function(req, res, next) {
 });
 
 router.get('/manageSpaces', function(req, res) {
+    reLogin(req, res);
     if (req.session.user.userType == "Admin") {
         spaceModel.find({}, function (err, spacesDB) {
             if (err) {
@@ -185,6 +187,7 @@ router.post('/bookSpace', function(req, res, next) {
 });
 
 router.get('/bookings', function(req, res, next) {
+    reLogin(req, res);
     let bookings;
     bookingModel.find({ userID: req.session.user.userID }, function(err, userBookings) {
         if(err) {
@@ -216,20 +219,21 @@ router.post('/cancelBooking', function(req, res) {
             console.log(err);
             return res.status(500).send();
         }
-        res.redirect(`/bookings`);
+        res.redirect('/bookings');
     });
 
 });
 
 router.get('/account', function(req, res, next) {
-    if (!req.session.user) {
-        res.render('index');
-    }
-
+    // if (!req.session.user) {
+    //   res.render('index', { layout: false });
+    // }
+    reLogin(req, res);
     res.render('account', { user: req.session.user});
 });
 
 router.get('/manageUsers', function(req, res) {
+    reLogin(req, res);
     userModel.find({}, function(err, userDB) {
         if(err) {
             console.log(err);
@@ -245,6 +249,8 @@ router.get('/manageUsers', function(req, res) {
 //the Bookings are then queried with the .find() function ***this will need the correct date added***
 //the booking collection is also stored in a temporary list and sent filterSpaces() to remove private data.
 router.get('/altgetSpaces', function(req, res) {
+    reLogin(req, res);
+
     let spaces = [];
     let bookings = [];
     let filteredSpaces = [];
@@ -421,6 +427,8 @@ router.post('/getSpaceData', function(req, res) {
 });
 
 router.get('/showSpaces', function(req, res) {
+  reLogin(req, res);
+
     res.render('altBookSpace');
 });
 
@@ -563,6 +571,12 @@ function filterBookings(bookings, receipts) {
 
     });
     return newBookings;
-}
+  }
+
+  function reLogin(req, res){
+    if (!req.session.user) {
+      res.render('index', { layout: false });
+    }
+  }
 
 module.exports = router;
