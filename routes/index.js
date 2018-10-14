@@ -44,8 +44,14 @@ var spaceModel = mongoose.model('Spaces', spaceSchema);
 var receiptModel = mongoose.model('Receipts', receiptSchema);
 
 /* GET home page. */
-router.get('/', function(req, res, next) {
-  res.render('index', { layout: false });
+router.get('/', function(req, res) {
+    req.session.isLoggedIn = false;
+    res.render('index', { layout: false });
+});
+router.get('/logout', function(req, res) {
+    delete req.session.user;
+    req.session.isLoggedIn = false;
+    res.redirect('/');
 });
 
 router.post('/payPortal', function(req, res) {
@@ -103,7 +109,7 @@ router.post('/showReceipt',function(req,res) {
                 if (err) {
                     console.log(err);
                 } else {
-                    res.render('receipt', { receipt: receipt, booking: booking });
+                    res.render('receipt', { receipt: receipt, booking: booking, sessionUser: req.session });
                 }
             });
 
@@ -115,17 +121,21 @@ router.post('/showReceipt',function(req,res) {
 
 
 router.get('/dashboard', function(req, res, next) {
+    if (req.session.isLoggedIn != null) {
     let date;
     let todaysDate = new Date();
-    date = todaysDate.getDate().toString() + "/" + (todaysDate.getMonth()+1).toString() + "/" + todaysDate.getFullYear().toString();
+    date = todaysDate.getDate().toString() + "/" + (todaysDate.getMonth() + 1).toString() + "/" + todaysDate.getFullYear().toString();
 
-    bookingModel.find({ date: date, userID: req.session.user.userID }, function(err, bookingsDB) {
-        if(err) {
+    bookingModel.find({date: date, userID: req.session.user.userID}, function (err, bookingsDB) {
+        if (err) {
             console.log(err);
         } else {
-            res.render('dashboard', {bookings: bookingsDB});
+            res.render('dashboard', {bookings: bookingsDB, sessionUser: req.session.user});
         }
     });
+}  else {
+        res.redirect('/');
+    }
 });
 
 router.get('/manageSpaces', function(req, res) {
@@ -297,6 +307,7 @@ router.post('/login', function(req, res) {
             res.render('index', { layout: false, status: "Not valid a valid user" } )
         } else {
             req.session.user = user;
+            req.session.isLoggedIn = true;
             res.redirect('dashboard');
         }
 
