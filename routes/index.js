@@ -541,4 +541,6 @@ function filterBookings(bookings, receipts) {
     }
   }
 
+//module.data = filterSpaces();
+//module.data = filterBookings();
 module.exports = router;
