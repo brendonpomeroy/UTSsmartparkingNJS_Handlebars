@@ -59,7 +59,7 @@ a {
   display: none;
 }
 
-@media screen and (max-width: 800px) {
+@media screen and (max-width: 1024px) {
   .nav a:not(:first-child) {display: none;}
   .nav a.icon {
     float: right;
@@ -67,7 +67,7 @@ a {
   }
 }
 
-@media screen and (max-width: 800px) {
+@media screen and (max-width: 1024px) {
   .nav.responsive {position: relative;}
   .nav.responsive .icon {
     position: absolute;
@@ -207,6 +207,29 @@ th, td {
   border: none;
 }
 
+.map{
+  padding: 10px;
+  margin: 20px;
+}
+
+.map table{
+  padding: 0px;
+  width: 1024px;
+}
+
+.map tr, .map td{
+  border: none;
+  padding: 0px;
+  margin: 0px;
+  width: 64px;
+  height: 128px;
+}
+
+.map img{
+  display: block;
+  width: 100%;
+  height: 100%;
+}
 
 
 /*

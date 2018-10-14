@@ -65,7 +65,50 @@
                     }
                 });
             });
+
+            // $('.haha').click(function () {
+            //     var day = new Date();
+                $.ajax({
+                    url: "/getSpaces",
+                    method: "post",
+                    data: {day: "Today"},
+                    success: function (spaces) {
+                        let htmlString = "<table>";;
+                        for (var spacesItr = 0; spacesItr < spaces.length; spacesItr++) {
+                          if (spacesItr % 10 == 0){
+                            htmlString += rowGround();
+                            htmlString += '<tr><td><img src="/images/ground.png"></td>';
+                          }else if (spacesItr % 5 == 0){
+                            htmlString += '<td><img src="/images/ground.png"></td>';
+                            htmlString += '<td><img src="/images/ground.png"></td>';
+                          }
+                          var hour = new Date().getHours() - 7;
+                          if (hour >= 0 && hour <= 16){
+                            if (spaces[spacesItr].bookings[hour])
+                              htmlString += '<td><img src="/images/available.png"></td>';
+                            else
+                              htmlString += '<td><img src="/images/taken.png"></td>';
+                          }
+                          if ((spacesItr+1)%10==0){
+                            htmlString += '<td><img src="/images/ground.png"></td></tr>';
+                          }
+                        }
+                        htmlString = htmlString + "</tr>" + rowGround() + "</table>";
+                        $("#mapDiv").html(htmlString);
+                    }
+                });
+            // });
+
         });
+
+        function rowGround(){
+          var groundStr = "<tr>";
+          for (let i=0; i<14;i++){
+            groundStr += '<td><img src="/images/ground.png"></td>';
+          }
+          groundStr += "</tr>";
+          return groundStr;
+        }
 
         function bookIn(space, hour, count, date) {
 
@@ -106,8 +149,10 @@
     </script>
 
     <input type="hidden" id="hiddenDate" value="">
-    <h2>Alternative Get Spaces</h2>
+    <h2>Get Spaces</h2>
 
+    <div class="map" id="mapDiv">
+    </div>
 
     <div id="searchController">
         <table>
