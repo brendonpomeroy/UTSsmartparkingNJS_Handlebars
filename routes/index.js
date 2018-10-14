@@ -277,7 +277,7 @@ router.post('/login', function(req, res) {
     });
 });
 
-
+// update user processes the users edit to their profile
 router.post('/updateUser', function(req, res, next) {
     //update the database
     let userID = req.session.user.userID;
@@ -286,7 +286,7 @@ router.post('/updateUser', function(req, res, next) {
     let email = req.body.email;
     let password = req.body.password;
     console.log(userID + ", " + name + ", " + phone + ", " + email + ", " + password );
-    if (password.length > 0) {
+    if (password.length > 0) { // if the user didnt change their password exclude it from the update
         userModel.findOneAndUpdate({userID: userID}, {
             name: name,
             phone: phone,
@@ -296,11 +296,11 @@ router.post('/updateUser', function(req, res, next) {
             if (err) {
                 console.log(err);
             } else {
-                res.redirect('/account');
-                req.session.user = user;
+                res.redirect('/account'); // redirect the user to their account so they can see the changes
+                req.session.user = user; // update the user session with the new user details
             }
         });
-    } else {
+    } else { // otherwise update everything
         userModel.findOneAndUpdate({userID: userID}, {
             name: name,
             phone: phone,
@@ -316,15 +316,16 @@ router.post('/updateUser', function(req, res, next) {
     }
 });
 
+//delete user processes the administrators request to remove a user from the system.
 router.post('/deleteUser', function(req, res, next) {
         let userID = req.body.deleteUserID;
 
-        userModel.deleteOne({userID: userID}, function (err) {
+        userModel.deleteOne({userID: userID}, function (err) { // delete user with the matching ID
             if (err) {
                 console.log(err);
-                return res.status(500).send();
+                return res.status(500).send(); // if an error occurred send a server error
             }
-            res.redirect(`/manageUsers`);
+            res.redirect(`/manageUsers`); // redirect the admin to the manage users page to continue making changes
         });
 });
 
@@ -339,10 +340,10 @@ router.post('/addUser', function(req, res, next) {
     newUser.userType = req.body.usertype;
     newUser.password = req.body.password;
 
-    newUser.save(function(err, addedUser) {
+    newUser.save(function(err, addedUser) { // save the user using mongoose
         if (err) {
             console.log(err);
-            res.status(500).send();
+            res.status(500).send(); // if there was an error send a server error
         } else {
             //console.log('User added: ' + addedUser.name())
             res.redirect('/manageUsers');
@@ -350,6 +351,7 @@ router.post('/addUser', function(req, res, next) {
     });
 });
 
+//get user data is used by the manage users page to get user data when the admin opts to view the user
 router.post('/getUserData', function(req, res) {
     userID = req.body.userID;
     userModel.findOne({ userID: parseInt(userID)}, function(err, user) {
@@ -362,7 +364,7 @@ router.post('/getUserData', function(req, res) {
             //No valid user found
             res.render('manageUsers', { status: "An error occurred"} )
         } else {
-            //user found
+            /*/user found
             bookingModel.findOne({ userID: parseInt(userID)}, function(err, bookings) {
                 if (err) {
                     //error occurred
@@ -370,10 +372,10 @@ router.post('/getUserData', function(req, res) {
                     res.render('manageUsers', { status: "An error occurred"} )
                 } else {
                     //user found
-                    //res.writeHead(200, { 'Content-Type': 'application/json' });
                     res.send({user: user, bookings: bookings});
                 }
-            });
+            });*/
+            res.send({user: user});
         }
     });
 });
