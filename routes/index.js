@@ -479,7 +479,7 @@ function filterSpaces(spaces, bookings) {
         bookings.forEach(function(booking) {
             if (booking.spaceID == space.spaceID){
                 for(var i = 0; i <= 15; i++) {
-                    if (i >= booking.timeFrom-7 && i <= booking.timeTo-7 ) {
+                    if (i >= booking.timeFrom-7 && i <= booking.timeTo-8 ) {
                         timeSlots[i] = false;
                     }
                 }
@@ -541,4 +541,6 @@ function filterBookings(bookings, receipts) {
     }
   }
 
+//module.data = filterSpaces();
+//module.data = filterBookings();
 module.exports = router;

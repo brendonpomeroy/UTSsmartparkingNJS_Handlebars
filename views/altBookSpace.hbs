@@ -30,14 +30,14 @@
 
             });
 
-            $('.displaySpaces').click(function () {
-                var day = $(this).attr("id");
+            $('.displaySpaces').click(function () { //when a day is clicked
+                var day = $(this).attr("id"); //store day for db query
                 setGlobalDate(day);
-                $.ajax({
+                $.ajax({ //query db
                     url: "/getSpaces",
                     method: "post",
                     data: {day: day},
-                    success: function (spaces) {
+                    success: function (spaces) { // if successful, display data
                         let htmlString = "<table id=\"spaces\"><tr><th>Space</th><th>Type</th><th>07:00</th><th>08:00</th><th>09:00</th><th>10:00</th><th>11:00</th><th>12:00</th><th>13:00</th><th>14:00</th><th>15:00</th><th>16:00</th><th>17:00</th><th>18:00</th><th>19:00</th><th>20:00</th><th>21:00</th><th>22:00</th></tr>";
                         for (var spacesItr = 0; spacesItr < spaces.length; spacesItr++) {
                             //display space details
