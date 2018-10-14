@@ -49,7 +49,6 @@ router.get('/', function(req, res, next) {
 });
 router.get('/logout', function(req, res) {
     delete req.session.user;
-    req.session.isLoggedIn = false;
     res.redirect('/');
 });
 
@@ -230,9 +229,6 @@ router.post('/cancelBooking', function(req, res) {
 });
 
 router.get('/account', function(req, res, next) {
-    // if (!req.session.user) {
-    //   res.render('index', { layout: false });
-    // }
     reLogin(req, res);
     res.render('account', { user: req.session.user});
 });
@@ -308,6 +304,11 @@ router.post('/login', function(req, res) {
             res.render('index', { layout: false, status: "Not valid a valid user" } )
         } else {
             req.session.user = user;
+            if (user.userType == "Admin") {
+                req.app.locals.isAdmin=true;
+            } else {
+                req.app.locals.isAdmin=false;
+            }
             res.redirect('dashboard');
         }
 
