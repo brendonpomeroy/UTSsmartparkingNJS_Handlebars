@@ -43,29 +43,33 @@ var bookingModel = mongoose.model('Bookings', bookingSchema);
 var spaceModel = mongoose.model('Spaces', spaceSchema);
 var receiptModel = mongoose.model('Receipts', receiptSchema);
 
-/* GET home page. */
-router.get('/', function(req, res, next) {
-  res.render('index', { layout: false });
+//get the landing page (login)
+router.get('/', function(req, res, next) { //.get as it is a normal get request
+  res.render('index', { layout: false }); // render the page using express - layout false to stop nav being rendered
 });
+
+//log the user out
 router.get('/logout', function(req, res) {
-    delete req.session.user;
-    res.redirect('/');
+    delete req.session.user; // delete the user in the session
+    res.redirect('/'); // redirect to log in
 });
 
+// pay portal is to simulat payment - not for production - this is where the system links to a payment service
 router.post('/payPortal', function(req, res) {
-    res.render('pay', { layout: false, bookingID: req.body.bookingID });
+    res.render('pay', { layout: false, bookingID: req.body.bookingID }); // we will use the booking id to track what the user is paying
 });
 
+//pay processes the payment on our database and records the transaction then redirects to the bookings view
 router.post('/pay', function(req, res) {
     let bookingID = req.body.bookingID;
     //check if thepayment was successful
-    if (req.body.paymentStatus == "fail") {
-        res.redirect('/bookings');
-    } else {
+    if (req.body.paymentStatus == "fail") { // if the payment failed
+        res.redirect('/bookings'); // redirect to the bookings page
+    } else { // otherwise update the database
         bookingModel.findOne({_id: bookingID}, function(err, booking){
             if (err){
-                console.log(err);
-            } else if (!booking) {
+                console.log(err); // log errors that occur
+            } else if (!booking) { //if the booking doesnt exist then log system error (earlier error handling will normally catch this)
                 console.log(err);
                 res.redirect('/bookings');
             } else {
@@ -94,6 +98,7 @@ router.post('/pay', function(req, res) {
     }
 });
 
+//show receipt allows the user to view a digital version of their receipt to keep for their own records
 router.post('/showReceipt',function(req,res) {
     console.log(req.body.receiptID);
     receiptModel.findOne({ _id: req.body.receiptID }, function (err, receipt) {
@@ -117,52 +122,58 @@ router.post('/showReceipt',function(req,res) {
     //res.render('receipt', { receipt: receipt });
 });
 
-
+//dashboard is where user lands after logging in and is represresented by home in the nav
 router.get('/dashboard', function(req, res, next) {
-    reLogin(req, res);
+    reLogin(req, res); //check the user is logger in
+
+    //create todays date to match the database scheme
     let date;
     let todaysDate = new Date();
     date = todaysDate.getDate().toString() + "/" + (todaysDate.getMonth()+1).toString() + "/" + todaysDate.getFullYear().toString();
 
+    //find the logged in users bookings for today
     bookingModel.find({ date: date, userID: req.session.user.userID }, function(err, bookingsDB) {
         if(err) {
             console.log(err);
         } else {
-            res.render('dashboard', {bookings: bookingsDB});
+            res.render('dashboard', {bookings: bookingsDB}); //pass bookings to handlebars to display
         }
     });
 });
 
+//manage spaces allows admins to manage the users in the database
 router.get('/manageSpaces', function(req, res) {
-    reLogin(req, res);
-    if (req.session.user.userType == "Admin") {
-        spaceModel.find({}, function (err, spacesDB) {
+    reLogin(req, res); // check user is logged in
+    if (req.session.user.userType == "Admin") { //check that the user is an admin
+        spaceModel.find({}, function (err, spacesDB) { //get all spaces
             if (err) {
                 console.log(err);
             } else {
-                res.render('manageSpaces', {spaces: spacesDB});
+                res.render('manageSpaces', {spaces: spacesDB}); //pass spaces to handlebars
             }
         });
     } else {
-        res.status(404).send();
+        res.status(404).send(); //send 404 not found if the user is not logged in as an admin
     }
 });
 
+//update spaces processes admins requests to modify a space
 router.post('/updateSpace', function(req, res) {
     //update the database
     let spaceID = req.body.spaceID;
     let spaceType = req.body.spaceType;
-    spaceModel.findOneAndUpdate({spaceID: spaceID}, {spaceType: spaceType}, function(err){
-        if (err){
-            console.log(err);
+    spaceModel.findOneAndUpdate({spaceID: spaceID}, {spaceType: spaceType}, function(err){ // update the space in the db
+        if (err){ // check for error
+            console.log(err); // log the error
         } else {
-            res.redirect('/manageSpaces');
+            res.redirect('/manageSpaces'); //otherwise if the space successfully update -> redirect back to the manageSpaces page
         }
     });
 });
 
+//book spaces process a booking and saves it to the database
 router.post('/bookSpace', function(req, res, next) {
-    //
+    //calculate the price of the booking server side for security
     let inputHours = req.body.hours;
     let price;
     if (inputHours <= 2) {
@@ -173,6 +184,7 @@ router.post('/bookSpace', function(req, res, next) {
         price = 60;
     }
 
+    //create a new booking from the mongoose model
     let booking = new bookingModel();
     //booking.bookingID = getID();
     booking.userID = req.session.user.userID; //user id - automatically taken from the session
@@ -181,114 +193,64 @@ router.post('/bookSpace', function(req, res, next) {
     booking.timeFrom = parseInt(req.body.timeFrom);//time from
     booking.timeTo = parseInt(req.body.timeFrom) + parseInt(req.body.hours);//time to
     booking.price = price;
-    booking.save(function(err, confirmedBooking) {
+    booking.save(function(err, confirmedBooking) { //save the booking to the database
         if (err) {
-            console.log(err);
+            console.log(err); //log errors
         } else {
-            res.redirect('/bookings');
+            res.redirect('/bookings'); //direct user to their bookings
         }
     });
 });
 
+//bookings allows the user to view their bookings
 router.get('/bookings', function(req, res, next) {
-    reLogin(req, res);
-    let bookings;
-    bookingModel.find({ userID: req.session.user.userID }, function(err, userBookings) {
+    reLogin(req, res); // check theyre logged in
+    bookingModel.find({ userID: req.session.user.userID }, function(err, userBookings) { // find the users bookings
         if(err) {
-            console.log(err);
+            console.log(err); // log errors
         } else {
-                //res.render('bookings', { bookings: userBookings } );
-            //bookings = userBookings;
-            receiptModel.find({}, function(err, receipts) {
+            receiptModel.find({}, function(err, receipts) { // find theusers receipts
                 if(err) {
-                    console.log(err);
+                    console.log(err); // log errors
                 } else {
-                    res.render('bookings', { bookings: filterBookings(userBookings, receipts) });
+                    res.render('bookings', { bookings: filterBookings(userBookings, receipts) }); // use filterBookings to return a merged and processed version of the bookings that works with handlebars
                 }
             });
         }
     });
-
-
-
 });
 
+//cancel booking processes the users request to delete their booking
 router.post('/cancelBooking', function(req, res) {
     //update the database
-
     let bookingID = req.body.bookingID;
-
-    bookingModel.deleteOne({_id: bookingID}, function (err) {
+    bookingModel.deleteOne({_id: bookingID}, function (err) { // delete one is the newest call to delete using mongoose and mongoDB by extension
         if (err) {
             console.log(err);
-            return res.status(500).send();
+            return res.status(500).send(); // return server error if error occurred
         }
-        res.redirect('/bookings');
+        res.redirect('/bookings'); // redirect the user to their bookings to seethe changes
     });
 
 });
 
+//account displays the users information and allows them to edit their details
 router.get('/account', function(req, res, next) {
     reLogin(req, res);
     res.render('account', { user: req.session.user});
 });
 
+// manage users is a way for administrators to see the users in the system and make changes
 router.get('/manageUsers', function(req, res) {
     reLogin(req, res);
-    userModel.find({}, function(err, userDB) {
+    userModel.find({}, function(err, userDB) { // get all users
         if(err) {
             console.log(err);
         } else {
-            res.render('manageUsers', { users: userDB} )
+            res.render('manageUsers', { users: userDB} ) // pass users to handlebars to render out to the user
         }
     });
 });
-
-
-//Get spaces is triggered by a user clicking the day options, the function then
-//opens the database Spaces collection and stores it in a list temporarily
-//the Bookings are then queried with the .find() function ***this will need the correct date added***
-//the booking collection is also stored in a temporary list and sent filterSpaces() to remove private data.
-router.get('/altgetSpaces', function(req, res) {
-    reLogin(req, res);
-
-    let spaces = [];
-    let bookings = [];
-    let filteredSpaces = [];
-
-    let date;
-    let todaysDate = new Date();
-    if (req.query.day == "Today") {
-        date = todaysDate.getDate().toString() + "/" + (todaysDate.getMonth()+1).toString() + "/" + todaysDate.getFullYear().toString();
-    }
-    else if (req.query.day == "Tomorrow") {
-        date = (todaysDate.getDate()+1).toString() + "/" + (todaysDate.getMonth()+1).toString() + "/" + todaysDate.getFullYear().toString();
-    }
-    else {
-        date = (todaysDate.getDate()+2).toString() + "/" + (todaysDate.getMonth()+1).toString() + "/" + todaysDate.getFullYear().toString();
-    }
-    console.log(date);
-
-
-    bookingModel.find({ date: date }, function(err, bookingsDB) {
-        if(err) {
-            console.log(err);
-        } else {
-            bookings = bookingsDB;
-        }
-    });
-    spaceModel.find({}, function(err, spaceDB) {
-        if(err) {
-            console.log(err);
-        } else {
-           spaces = spaceDB;
-        }
-        filteredSpaces = filterSpaces(spaces, bookings);
-        console.log(filteredSpaces);
-        res.render('bookSpace', { spaces: filterSpaces(spaces, bookings) }); //may need some sequential support
-    });
-});
-
 
 //This is the log in Functionality. The users login data is received using post and accessed with req (request)
 //The data base is opened and the User collection is used to verify the users ID and password. a session is then
@@ -314,6 +276,7 @@ router.post('/login', function(req, res) {
 
     });
 });
+
 
 router.post('/updateUser', function(req, res, next) {
     //update the database
@@ -369,7 +332,7 @@ router.post('/deleteUser', function(req, res, next) {
 router.post('/addUser', function(req, res, next) {
 
     let newUser = new userModel(); //must create a new instance of the model when creating a user.
-    newUser.userID = parseInt(req.body.userID); //according to sschema this needs to be a number
+    newUser.userID = parseInt(req.body.userID); //according to schema this needs to be a number
     newUser.name = req.body.name;
     newUser.phone = parseInt(req.body.phone);
     newUser.email = req.body.email;
@@ -433,8 +396,7 @@ router.post('/getSpaceData', function(req, res) {
 });
 
 router.get('/showSpaces', function(req, res) {
-  reLogin(req, res);
-
+    reLogin(req, res);
     res.render('altBookSpace');
 });
 
@@ -542,6 +504,8 @@ function filterSpaces(spaces, bookings) {
     return newSpaces;
 }
 
+// filter bookings checks to see if bookings are past or paid to determine which options the user needs
+// on the bookings page, it returns it in an object that works well with the templating engine.
 function filterBookings(bookings, receipts) {
     let newBookings = [];
     bookings.forEach(function(booking) {

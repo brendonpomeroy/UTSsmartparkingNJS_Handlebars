@@ -116,7 +116,9 @@
                 </div>
                 <div>
                     <h4>User Bookings</h4>
-                    <div id="userBookings"></div>
+                    <table id="userBookings">
+
+                    </table>
                 </div>
                 </p>
             </div>
@@ -158,15 +160,42 @@
                 success: function (bookings) {
                     console.log(bookings);
                     let htmlString = "<table><tr><th>Booking ID</th><th>Space</th><th>Date</th><th>From</th><th>To</th></tr>";
+                    console.log(bookings[0].userID);
+                    for (let i = 0; i < bookings.length ; i++) {
+                        /*htmlString = "<tr><td id=\"bookingID"+i+"\"></td><td id=\"spaceID"+i+"\"></td><td id=\"date"+i+"\"></td><td id=\"timeFrom"+i+"\"></td><td id=\"timeTo"+i+"\"></td></tr>";
+                        $("#userBookings").html(htmlString);
+                        $(("bookingID"+i.toString())).html(bookings[i].bookingID);
+                        $(("spaceID"+i.toString())).html(bookings[i].spaceID);
+                        $(("date"+i.toString())).html(bookings[i].date);
+                        $(("timeFrom"+i.toString())).html(bookings[i].timeTo);
+                        $(("timeTo"+i.toString())).html(bookings[i].timeFrom);*/
+
+                        let table = document.getElementById("userBookings");
+                        let row = table.insertRow(i);
+                        let bookingID = row.insertCell(0);
+                        let spaceID = row.insertCell(1);
+                        let date = row.insertCell(2);
+                        let from = row.insertCell(3);
+                        let to = row.insertCell(4);
+                        console.log(bookings[i].bookingID);
+
+                        bookingID.innerHTML = bookings[i]._id;
+                        spaceID.innerHTML = bookings[i].spaceID;
+                        date.innerHTML = bookings[i].date;
+                        from.innerHTML = bookings[i].timeFrom;
+                        to.innerHTML = bookings[i].timeTo;
+
+                    }
+                    /*
                     for (let booking in bookings) {
                         htmlString += "<tr><td>" + booking.bookingID + "</td><td>";
                         htmlString += booking.spaceID + "</td><td>";
                         htmlString += booking.date + "</td><td>";
                         htmlString += booking.timeFrom + ":00</td><td>";
                         htmlString += booking.timeTo + ":00</td></tr>";
-                    }
-                    htmlString+="</table>";
-                    $("#userBookings").html(htmlString);
+                    }*/
+                    //htmlString+="</table>";
+                    //$("#userBookings").html(htmlString);
                     $('#userDetailsModal').modal("show");
                 }
             });
@@ -178,4 +207,3 @@
     });
 
 </script>
-
