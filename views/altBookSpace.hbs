@@ -73,10 +73,11 @@
                     method: "post",
                     data: {day: "Today"},
                     success: function (spaces) {
-                        let htmlString = "<table>";;
+                        let htmlString = "<table>" + rowGround(true);
                         for (var spacesItr = 0; spacesItr < spaces.length; spacesItr++) {
                           if (spacesItr % 10 == 0){
-                            htmlString += rowGround();
+                            if (spacesItr != 0)
+                              htmlString += rowGround(false);
                             htmlString += '<tr><td><img src="/images/ground.png"></td>';
                           }else if (spacesItr % 5 == 0){
                             htmlString += '<td><img src="/images/ground.png"></td>';
@@ -93,7 +94,7 @@
                             htmlString += '<td><img src="/images/ground.png"></td></tr>';
                           }
                         }
-                        htmlString = htmlString + "</tr>" + rowGround() + "</table>";
+                        htmlString = htmlString + "</tr>" + rowGround(true) + "</table>";
                         $("#mapDiv").html(htmlString);
                     }
                 });
@@ -101,10 +102,15 @@
 
         });
 
-        function rowGround(){
+        function rowGround(exit){
           var groundStr = "<tr>";
           for (let i=0; i<14;i++){
             groundStr += '<td><img src="/images/ground.png"></td>';
+            if (i == 5 && exit){
+              groundStr += '<td><img src="/images/left.png"></td>'
+              groundStr += '<td><img src="/images/right.png"></td>'
+              i = 7;
+            }
           }
           groundStr += "</tr>";
           return groundStr;

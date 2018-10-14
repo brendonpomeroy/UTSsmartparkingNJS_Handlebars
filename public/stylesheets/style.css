@@ -214,15 +214,15 @@ th, td {
 
 .map table{
   padding: 0px;
-  width: 1024px;
+  width: 768px;
 }
 
 .map tr, .map td{
   border: none;
   padding: 0px;
   margin: 0px;
-  width: 64px;
-  height: 128px;
+  width: 48px;
+  height: 80px;
 }
 
 .map img{
