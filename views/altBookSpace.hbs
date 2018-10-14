@@ -1,8 +1,6 @@
 <div class="contentContainer">
     <h1>{{title}}</h1>
     <script>
-        todaysDate = new Date();
-
 
         function setGlobalDate(day) {
             let date;
@@ -95,36 +93,13 @@
 
         }
 
-        var thirdDay = new Date();
 
-        thirdDay.setDate(thirdDay.getDate() + 2);
-        var days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-        document.getElementById("thirdDayButton").value = days[thirdDay.getDay()];
-
-        var day = document.getElementById("selectedDay").value;
-
-        if (day.trim() == "Today") {
-            setCurrentButton("todayButton");
-        }
-        else if (day.trim() == "Tomorrow") {
-            setCurrentButton("tomorrowButton");
-        }
-        else {
-            //setCurrentButton("thirdDayButton");
-        }
-
-        function setDay(selectedDay) {
-            document.getElementById("selectedDay").value = selectedDay;
-        }
 
         function setCurrentButton(currDay) {
             document.getElementById('Today').classList.remove('activeButton');
             document.getElementById('Tomorrow').classList.remove('activeButton');
             document.getElementById('thirdDayButton').classList.remove('activeButton');
             document.getElementById(currDay).classList.add('activeButton');
-            //document.getElementById(currDay).style.border = "solid #0f4beb";
-            //document.getElementById(currDay).style.background = "#ffffff";
-            //document.getElementById(currDay).style.color = "#0f4beb";
         }
 
 
@@ -209,3 +184,12 @@
         </div>
     </div>
 </div>
+
+<script>
+    var thirdDay = new Date();
+    thirdDay.setDate(thirdDay.getDate() + 2);
+    console.log(thirdDay);
+    var days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+    console.log(days[thirdDay.getDay()]);
+    document.getElementById('thirdDayButton').value = days[thirdDay.getDay()];
+</script>
