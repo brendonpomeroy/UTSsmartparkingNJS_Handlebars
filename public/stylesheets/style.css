@@ -91,10 +91,11 @@ a {
   font-size: 30px;
 }
 
-/*@media screen and (max-width: 600px) {
-  .loginInput{
-    width: 80%;
-  }*/
+@media screen and (max-width: 600px) {
+  .loginInput, .buttonUTS{
+    width: 75%;
+  }
+}
 
 #loginWrapper {
   text-align: center;
