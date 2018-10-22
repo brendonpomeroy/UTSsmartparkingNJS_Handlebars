@@ -74,6 +74,7 @@ a {
     right: 0;
     top: 0;
   }
+
   .nav.responsive a {
     float: none;
     display: block;
@@ -89,6 +90,11 @@ a {
   height: 80px;
   font-size: 30px;
 }
+
+@media screen and (max-width: 600px) {
+  #loginWrapper{
+    width: 80%;
+  }
 
 #loginWrapper {
   text-align: center;
