@@ -2,7 +2,8 @@ var express = require('express');
 var router = express.Router();
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
-mongoose.connect("mongodb+srv://System:utssmartparking@parkdb-fez7r.mongodb.net/carParkDB?retryWrites=true");
+var auth = require('./auth.json');
+mongoose.connect(auth.token);
 
 
 //schemas define what data and how the data will exist in the database. These are strict and can only be defined once.
